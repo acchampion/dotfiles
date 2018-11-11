@@ -1,0 +1,14 @@
+######################################################################
+# Bash aliases
+######################################################################
+# Inspiration: https://github.com/mathiasbynens/dotfiles
+######################################################################
+
+alias stdsun='ssh -Y champion@stdsun.cse.ohio-state.edu'
+alias stdlogin='ssh -Y champion@stdlogin.cse.ohio-state.edu'
+alias stdlinux='ssh -X -o "UserKnownHostsFile /dev/null" champion.17@stdlinux.cse.ohio-state.edu'
+alias concamp='ssh concamp@cc.cse.ohio-state.edu'
+alias champcse='ssh -Y champion@champion.cse.ohio-state.edu'
+alias droidbuilder='ssh -Y champion@droidbuilder.cse.ohio-state.edu'
+alias droidmaster='ssh -Y droidmaster@droidbuilder.cse.ohio-state.edu'
+alias ll='ls -al --color=auto'

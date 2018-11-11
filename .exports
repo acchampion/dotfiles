@@ -1,0 +1,97 @@
+######################################################################
+# Bash export variables
+######################################################################
+# Sources: https://github.com/mathiasbynens/dotfiles ,
+#  https://www.topbug.net/blog/2016/12/10/parallelize-make-by-default/
+######################################################################
+
+export PS1='[\u@\h \w]\$ '
+
+# Prefer US English and use UTF-8.
+export LANG='en_US.UTF-8'
+export LC_ALL='en_US.UTF-8'
+export LC_CTYPE=C 
+export LANG=C
+
+# Highlight section titles in manual pages.
+export LESS_TERMCAP_md="${blue}";
+
+# Don’t clear the screen after quitting a manual page.
+export MANPAGER='less -X';
+
+# Avoid issues with `gpg` as installed via Homebrew.
+# https://stackoverflow.com/a/42265848/96656
+export GPG_TTY=$(tty);
+
+# Set up Gtags for Emacs
+export GTAGSLIBPATH=$HOME/.gtags/
+
+# Paths for macOS systems
+export CPPFLAGS="-I/usr/local/include -I/usr/local/opt/readline/include -I/usr/local/opt/openldap/include -I/usr/local/opt/openblas/include -I/usr/local/opt/icu4c/include -I/usr/local/opt/libarchive/include -I/usr/local/opt/qt5/include -I/usr/local/opt/curl/include -I/usr/local/opt/boost/include  -I/usr/local/opt/gtk+/include -I/usr/local/opt/gtk+3/include -I/usr/local/opt/gtkmm/include -I/usr/local/opt/gtkmm3/include $CPPFLAGS"
+export LDFLAGS="-L/usr/local/lib -L/usr/local/opt/readline/lib -L/usr/local/opt/openldap/lib -L/usr/local/opt/openblas/lib -L/usr/local/opt/libffi/lib -L/usr/local/opt/icu4c/lib -L/usr/local/opt/libarchive/lib  -L/usr/local/opt/qt5/lib -L/usr/local/opt/curl/lib -L/usr/local/opt/texinfo/lib -L/usr/local/opt/boost/lib -L/usr/local/opt/gtk+/lib -L/usr/local/opt/gtk+3/lib -L/usr/local/opt/gtkmm/lib -L/usr/local/opt/gtkmm3/lib $LDFLAGS"
+export LD_LIBRARY_PATH="/usr/local/lib:/usr/local/opt/openldap/lib:/usr/local/opt/openblas/lib:/usr/local/opt/libffi/lib:/usr/local/opt/icu4c/lib:/usr/local/opt/libarchive/lib:/usr/local/opt/qt5/lib:/usr/local/opt/curl/lib:/usr/local/opt/texinfo/lib:/usr/local/opt/boost/lib:$LD_LIBRARY_PATH"
+export DYLD_LIBRARY_PATH="/usr/local/opt/icu4c/lib:/usr/local/opt/libffi/lib:/usr/local/opt/libarchive/lib:/usr/local/opt/qt5/lib:/usr/local/opt/curl/lib:/usr/local/opt/texinfo/lib:/usr/local/opt/boost/lib:$DYLD_LIBRARY_PATH"
+export PKG_CONFIG_PATH="/usr/local/opt/libffi/lib/pkgconfig:/usr/local/opt/libarchive/lib/pkgconfig:/usr/local/opt/icu4c/lib/pkgconfig:/usr/local/opt/qt5/lib/pkgconfig:/usr/local/opt/curl/lib/pkgconfig:/usr/local/opt/gtk+/lib/pkgconfig:/usr/local/opt/gtk+3/lib/pkgconfig:/usr/local/opt/gtkmm/lib/pkgconfig:/usr/local/opt/gtkmm3/lib/pkgconfig:$PKG_CONFIG_PATH"
+export GTK_PATH=/usr/local/lib/gtk-2.0
+
+# set MAKEFLAGS
+if type nproc &>/dev/null; then   # GNU/Linux
+  export MAKEFLAGS="$MAKEFLAGS -j$(($(nproc)-1))"
+elif type sysctl -n hw.ncpu &>/dev/null; then   # macOS, FreeBSD
+  export MAKEFLAGS="$MAKEFLAGS -j$(($(sysctl -n hw.ncpu)-1))"
+fi
+
+# Set Android NDK and compilation vars
+export ANDROID_SDK_ROOT=/usr/local/share/android-sdk
+export ANDROID_NDK_HOME=/usr/local/share/android-ndk
+export ANDROID_SDK_TOOLS="~/android-sdk-tools"
+# export GSTREAMER_SDK_ROOT_ANDROID=~/gstreamer-sdk-android-arm-debug-2013.6
+export USE_CCACHE=1
+export MKL_NUMBER_THREADS=1
+export REPO_TRACE=1
+export BUILD_MAC_SDK_EXPERIMENTAL=1
+
+
+# Paths
+BREW_EXEC=/usr/local/bin/brew
+BREW_GNU_COREUTILS_ROOT="$(/usr/local/bin/brew --prefix coreutils)"
+BREW_GNU_COREUTILS_PATH="$BREW_GNU_COREUTILS_ROOT/libexec/gnubin"
+BREW_GNU_FINDUTILS_ROOT="$(/usr/local/bin/brew --prefix findutils)"
+BREW_GNU_FINDUTILS_PATH="$BREW_GNU_FINDUTILS_PATH/libexec/gnubin"
+BREW_GNU_SED_ROOT="$(/usr/local/bin/brew --prefix gnu-sed)"
+BREW_GNU_SED_PATH="$BREW_GNU_SED_ROOT/libexec/gnubin"
+BREW_GNU_COREUTILS_MANPATH="$BREW_GNU_COREUTILS_ROOT/libexec/gnuman"
+BREW_GNU_FINDUTILS_MANPATH="$BREW_GNU_FINDUTILS_ROOT/libexec/gnuman"
+BREW_GNU_SED_MANPATH="$BREW_GNU_SED_ROOT/libexec/gnuman"
+TEX_PATH=/usr/texbin:/Library/TeX/texbin
+GO_PATH=/usr/local/opt/go/libexec/bin
+FLUTTER_PATH=~/flutter/bin
+
+export MANPATH=$BREW_GNU_COREUTILS_MANPATH:$BREW_GNU_FINDUTILS_MANPATH:$BREW_GNU_SED_MANPATH:$MANPATH
+export PYTHONPATH="/usr/local/lib/python3.6/site-packages:$PYTHONPATH"
+export KDEDIRS=$KDEDIRS:$HOME/Library/Preferences/KDE:/usr/local/kde4
+export PATH="/usr/local/kde4/bin:~/bin:/bin:/sbin:/opt/X11/bin:/usr/local/sbin:/usr/local/bin:$BREW_GNU_COREUTILS_PATH:$BREW_GNU_FINDUTILS_PATH:$BREW_GNU_SED_PATH:$TEX_PATH:/usr/bin:/usr/sbin:$ANDROID_SDK_ROOT:$ANDROID_NDK_HOME:$ANDROID_SDK_TOOLS:$ANDROID_SDK_TOOLS/bin:/usr/local/mysql/bin:$GO_PATH:$FLUTTER_PATH:$PATH:$FDK_EXE"
+export JAVA_HOME=`/usr/libexec/java_home`
+launchctl setenv DYLD_LIBRARY_PATH /usr/local/kde4/lib:$DYLD_LIBRARY_PATH
+export XDG_DATA_HOME=$HOME/Library/Preferences/KDE/share
+export XDG_DATA_DIRS=/usr/local/kde4/share:/usr/local/share:/usr/share
+
+export FDK_EXE="~/bin/FDK/Tools/osx"
+export SVN_EDITOR=vim
+export FC=/usr/local/bin/gfortran
+export GNUTERM=aqua
+
+# Increase Bash history size. Allow 32³ entries; the default is 500.
+export HISTSIZE='32768'
+export HISTFILESIZE="${HISTSIZE}"
+# Omit duplicates and commands that begin with a space from history.
+export HISTCONTROL='ignoreboth'
+
+# Enable Homebrew docbook
+export XML_CATALOG_FILES="/usr/local/etc/xml/catalog"
+
+# Enable MySQL-Python-connector to use protobuf
+export MYSQLXPB_PROTOBUF_INCLUDE_DIR=/usr/local/opt/protobuf/include
+export MYSQLXPB_PROTOBUF_LIB_DIR=/usr/local/opt/protobuf/lib
+export MYSQLXPB_PROTOC=/usr/local/opt/protobuf/bin/protoc
+

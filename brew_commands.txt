@@ -1,0 +1,363 @@
+#!/usr/bin/env bash
+######################################################################
+# Package Installation Commands for Homebrew
+# (C) 2016-2018 Adam C. Champion
+######################################################################
+# Tested on macOS High Sierra (OS X 10.13).
+######################################################################
+# License: Apache 2.0
+######################################################################
+# This script is intended to be helpful. However, I offer it "as is"
+# with NO WARRANTY WHATSOEVER, including the implied warranties of
+# merchantability or fitness for a particular purpose. Users assume
+# all risk of using the script.
+######################################################################
+# Sources:
+#   - https://gist.github.com/xuhdev/8b1b16fb802f6870729038ce3789568f
+#   - https://github.com/mathiasbynens/dotfiles/blob/master/brew.sh
+#   - https://www.topbug.net/blog/2013/04/14/install-and-use-gnu-
+#       command-line-tools-in-mac-os-x/
+######################################################################
+######################################################################
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+######################################################################
+# Install GNU tools for macOS (more up-to-date) with dependencies
+######################################################################
+brew install coreutils binutils diffutils lzip
+brew install ed --with-default-names
+brew install findutils --with-default-names
+brew install gettext gnu-getopt
+brew install gnu-indent --with-default-names
+brew install gnu-sed --with-default-names
+brew install gnu-tar --with-default-names
+brew install gnu-which --with-default-names
+brew install pcre pkg-config
+brew install grep --with-default-names
+######################################################################
+# Begin: GNU TLS and dependencies
+######################################################################
+brew install gmp nettle libtasn1 libffi p11-kit libunistring gnutls
+######################################################################
+# End: GNU TLS and dependencies
+######################################################################
+brew install mpfr readline gawk gzip
+######################################################################
+# Begin: GNU Parallel and dependencies
+######################################################################
+brew install docbook docbook-xsl parallel
+######################################################################
+# End: GNU Parallel and dependencies
+######################################################################
+brew install autoconf autoconf-archive automake screen git watch wdiff
+######################################################################
+# Install Bash 4 with completion
+######################################################################
+brew install bash bash-completion2
+######################################################################
+# Install gcc without multilib for OpenMP support; also veclibfort
+######################################################################
+brew install libmpc isl gcc veclibfort
+export FC=/usr/local/bin/gfortran
+######################################################################
+# Other helpful binaries
+######################################################################
+brew install sqlite --with-functions
+brew install gdbm --with-libgdbm-compat
+brew install makedepend openssl python@2
+brew install xz python3
+######################################################################
+# Begin: GDB: Generate a certificate 'gdb-cert' to code-sign gdb if
+# you haven't already. Use macOS's Keychain Manager app to do so.
+# See https://sourceware.org/gdb/wiki/BuildingOnDarwin for details.
+######################################################################
+brew install gdb --with-python
+codesign -s gdb-cert /usr/local/bin/gdb
+######################################################################
+# End: GDB
+######################################################################
+brew install gpatch m4 make ncurses nano libmagic
+brew install file-formula openssh less mercurial rsync
+######################################################################
+# Begin: Install GPG and dependencies
+######################################################################
+brew install libgpg-error libgcrypt libksba libassuan pinentry pth \
+ libusb libusb-compat adns npth gnupg gpgme
+######################################################################
+# End: Install GPG and dependencies
+######################################################################
+brew install rename tree unzip
+brew install vim --with-override-system-vi
+brew install ack asciidoc zmq md5sha1sum
+######################################################################
+# Install Brew Cask and apps: Java, XQuartz, iTerm2, Chrome, Firefox.
+# Users are responsible for compliance with software license
+# agreements, including paying for licenses as required
+# (e.g., for Path Finder and Omni Group apps).
+######################################################################
+# Note: Oracle has changed licensing and support for Java/JDK. Each
+# new version of the JDK is only supported for 6 months, except
+# long-term support versions. I'm using OpenJDK 11 from here on out.
+######################################################################
+brew tap caskroom/cask
+brew cask install java iterm2 xquartz google-chrome firefox
+######################################################################
+# Boost and MPI support (for multicore architectures)
+######################################################################
+brew install swig popt sphinx-doc
+brew install cmake doxygen boost-build libevent
+brew install open-mpi --with-cxx-bindings --with-mpi-thread-multiple
+brew install tbb
+brew install boost --without-single
+brew install boost-mpi
+brew install boost-python
+######################################################################
+# Install hdf5
+######################################################################
+brew install szip libtool
+brew install hdf5 --with-mpi
+######################################################################
+# Install tmux with UTF-8 support
+######################################################################
+brew install utf8proc
+brew install tmux --with-utf8proc
+######################################################################
+# wget, curl with support for i18n URLs
+######################################################################
+brew install c-ares cunit libssh2
+brew install rtmpdump # Needed to stream RTMP (curl)
+brew install spdylay # Needed for HTTP/2 (curl)
+brew install jansson # Needed for HTTP/2 (curl)
+brew install jemalloc libev libidn libmetalink libidn2
+brew install wget --with-gpgme --with-libmetalink --with-pcre
+brew install curl --with-c-ares --with-gssapi --with-libssh2 \
+     --with-libmetalink --with-nghttp2 --with-rtmpdump
+brew install lynx
+######################################################################
+# Networking, security, and misc. tools (including Android, iOS dev.)
+######################################################################
+brew install aircrack-ng
+airodump-ng-oui-update
+brew install airspy bison help2man flex dos2unix tofrodos libdnet \
+     libpcap
+brew install tcpdump --with-libpcap
+brew install socat telnet apktool dex2jar smali gperf ccache \
+     gperftools markdown
+brew cask install wireshark
+brew install libplist usbmuxd libzip libimobiledevice \
+     ideviceinstaller ios-deploy cocoapods scrcpy
+######################################################################
+# More networking- and security-related binaries
+######################################################################
+brew install vbindiff
+brew install pv speedtest_cli hashcat
+######################################################################
+# Compression tools (parallel gzip, zopfli, xz, szip)
+######################################################################
+brew install p7zip pigz zopfli zlib lzlib
+######################################################################
+# Databases (MySQL, PostgreSQL)
+######################################################################
+brew install mysql --with-local-infile
+brew services start mysql
+brew install postgresql unixodbc
+######################################################################
+# Subversion
+######################################################################
+brew install apr openldap apr-util scons svn
+######################################################################
+# GIS libraries (round 1)
+######################################################################
+brew install json-c proj geos gpp freexl liblwgeom libxml2 \
+     libspatialite libkml protobuf protobuf-c
+######################################################################
+# Math support (for GNU Octave)
+######################################################################
+brew install fftw --with-mpi --with-openmp
+brew install openblas --with-openmp
+brew install gsl
+brew install arpack --with-mpi
+brew install qrupdate metis suite-sparse eigen cloog num-utils cgal \
+     sfcgal
+######################################################################
+# Install harry - LCS string matcher
+######################################################################
+# brew tap homebrew/science
+# brew install libarchive
+# brew install harry --with-openmp
+######################################################################
+# Ensure you install aquaterm before compiling gnuplot (unless you
+# want to compile gnuplot with qt, wxmac, etc.).
+######################################################################
+brew cask install aquaterm
+######################################################################
+# Java, Scala, Kotlin (JVM stuff)
+######################################################################
+brew install ivy
+brew install ant --with-bcel --with-ivy
+brew install gradle maven scala brew install leiningen kotlin
+######################################################################
+# Image and video manipulation libraries and tools. Note: You are
+# responsible for complying with all applicable laws in your region
+# (such as copyright); don't steal others' content!
+######################################################################
+brew install jpeg jhead
+brew install libtiff --with-xz
+brew install libgeotiff libpng jasper netpbm glib gts fltk giflib \
+     pngcheck libsvg ninja poco freetype fontconfig glib-networking
+brew install little-cms little-cms2
+brew install ghostscript --with-x11
+brew install epstool gl2ps intltool pixman psutils
+brew install groff --with-grohtml --with-gropdf
+brew install openjpeg
+brew install webp liblqr gd libwmf ilmbase openexr lame mp3gain yasm \
+     x264 chromaprint frei0r game-music-emu fribidi libass libgsm \
+     libmodplug libsoxr libvidstab libogg libvorbis flac libsndfile \
+     libbs2b
+brew install libvpx --with-visualizer
+brew install opencore-amr nasm openh264 opus sdl2 speex libebur128 \
+     orc schroedinger theora wavpack x265 zimg berkeley-db
+brew install libsamplerate --with-fftw --with-libsndfile
+brew install jack two-lame pango libde265 libheif
+brew install leptonica --with-giflib --with-openjpeg --with-webp
+brew install tesseract --with-all-languages --with-serial-num-pack \
+     --with-training-tools
+brew install libdv libshout taglib texi2html xvid xmlto dbus \
+     dbus-glib libidl orbit gconf hicolor-icon-theme \
+     gsettings-desktop-schemas
+######################################################################
+# Install QT5 support
+######################################################################
+brew install qt
+######################################################################
+# Install GTK+3 support
+######################################################################
+brew install at-spi2-core at-spi2-atk libepoxy gdk-pixbuf gtk+3 gtk+ \
+     rust libcroco gnome-themes-standard gobject-introspection
+brew install librsvg --with-gtk+3
+brew install graphviz --with-gts --with-librsvg --with-pango
+brew install libsvg-cairo perl vala libsoup itstool \
+     icon-naming-utils adwaita-icon-theme pygobject py2cairo pygtk \
+     gtk-mac-integration glade libglade gtkmm libglademm
+brew install imagemagick --with-fftw --with-fontconfig \
+     --with-ghostscript --with-hdri --with-libheif --with-liblqr \
+     --with-librsvg --with-libwmf --with-little-cms --with-openexr \
+     --with-pango
+brew install imagemagick@6 --with-fftw --with-fontconfig \
+     --with-ghostscript --with-hdri --with-liblqr --with-librsvg \
+     --with-libwmf --with-little-cms --with-openexr --with-pango
+brew install graphicsmagick --with-ghostscript --with-libwmf \
+     --with-little-cms2 --with-perl --with-webp
+brew install svg2pdf speexdsp
+brew install pulseaudio --with-glib
+brew install gstreamer gst-plugins-base flac aalib libcaca
+brew install gst-plugins-good --with-aalib --with-gdk-pixbuf \
+     --with-jack --with-libcaca --with-libdv --with-pulseaudio
+brew install libssh lua luajit geoipupdate geoip go hub libsmi \
+     portaudio gtk-chtheme gtk-engines gtk-murrine-engine
+######################################################################
+# Install poppler and inkscape
+######################################################################
+brew install libatomic_ops bdw-gc poppler potrace gtkmm3 gdl \
+     libiconv gtkextra
+brew tap caskformula/caskformula
+brew install inkscape --HEAD
+######################################################################
+# Install openmotif for ddd and xpdf
+######################################################################
+brew install openmotif ddd
+######################################################################
+# Math support for Octave
+######################################################################
+brew install texinfo glpk qhull plotutils pstoedit imake transfig \
+     libcerf sundials
+brew install gnuplot --with-aquaterm --with-qt
+brew install octave --with-qt
+######################################################################
+# Python stuff
+######################################################################
+brew install oniguruma jq sip numpy scipy ffmpeg
+######################################################################
+# Font stuff
+######################################################################
+brew install fondu ttf2pt1
+######################################################################
+# Pandoc and Emacs
+######################################################################
+brew install ghc cabal-install pandoc
+brew cask install emacs
+brew install languagetool ctags global
+######################################################################
+# Communications stuff
+######################################################################
+brew tap pothosware/pothos
+brew install hamlib minicom minimodem librtlsdr soapysdr soapyrtlsdr
+brew install --HEAD libosmosdr
+brew install muparserx pothos wxwidgets limesuite
+######################################################################
+# Build OpenCV on macOS
+######################################################################
+# brew cask install nvidia-cuda
+brew install sdl libdc1394 opencv opencv@2
+######################################################################
+# OSXFUSE with SSHFS
+######################################################################
+brew cask install osxfuse
+brew install sshfs
+######################################################################
+# Mapnik and GIS software
+######################################################################
+brew install libpq gdal zstd
+brew install postgis --with-protobuf-c
+brew install mapnik --with-cairo --with-gdal --with-postgresql
+######################################################################
+# Perlbrew
+######################################################################
+# curl -L https://install.perlbrew.pl | bash
+# perlbrew install perl-5.22.2
+# perlbrew switch perl-5.22.2
+# cpan Modern::Perl
+# cpan Data::Dump
+# cpan GIS::Distance
+# cpan DateTime
+######################################################################
+# Homebrew Cask Fonts.
+######################################################################
+# AFAIK, these fonts may be redistributed freely. You should always
+# check the font license terms.
+######################################################################
+brew tap caskroom/fonts
+brew cask install font-aleo font-archivo-narrow font-arimo \
+     font-bitter font-butler font-carrois-gothic \
+     font-carrois-gothic-sc font-charis-sil font-clear-sans \
+     font-cooper-hewitt font-cousine font-dejavu-sans font-fira-mono \
+     font-fira-sans font-freesans font-gentium-book-basic font-go \
+     font-go-mono font-hack font-ibm-plex font-lato \
+     font-league-gothic font-libertinus font-libre-baskerville \
+     font-libre-caslon-text font-libre-caslon-display \
+     font-libre-franklin font-menlo-for-powerline font-montserrat \
+     font-noto-sans font-noto-sans-mono font-noto-serif \
+     font-office-code-pro font-open-sans font-oswald \
+     font-playfair-display font-powerline-symbols font-roboto \
+     font-roboto-mono font-signika font-sorts-mill-goudy \
+     font-source-code-pro font-source-sans-pro font-source-serif-pro \
+     font-spectral font-stix font-tinos font-ubuntu font-urw-base35 \
+     font-zilla-slab
+######################################################################
+# More Homebrew Cask Apps.
+######################################################################
+# Note that OmniGraffle and OmniFocus are proprietary; their use after
+# 30 days requires payment (and acceptance of The Omni Group's
+# license). Some apps are proprietary, so ensure you read the software
+# licenses (and agree to them) before using these apps!
+######################################################################
+brew cask install android-file-transfer android-ndk \
+     android-platform-tools android-sdk android-studio arduino \
+     box-sync calibre clamxav cyberduck dropbox fiji virtualbox
+brew cask install genymotion
+brew cask install gfxcardstatus gimp google-earth-pro graphsketcher \
+     ibackupbot jd-gui libreoffice marble max megasync mendeley \
+     mp3gain-express mysqlworkbench omnidisksweeper omnifocus \
+     omnigraffle pacifist path-finder pgadmin4 processing qcad
+brew cask install scribus skim skype soapui sourcetree teamviewer \
+     texmaker tabula thunderbird tor-browser transmission \
+     visual-studio-code vlc weka

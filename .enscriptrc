@@ -1,0 +1,4 @@
+DefaultFancyHeader: emacs-champion
+AFMPath: /Users/adamcchampion/.fonts:/usr/local/Cellar/enscript/1.6.6/share/enscript/afm
+DefaultMedia: Letter
+PageLabelFormat: long
