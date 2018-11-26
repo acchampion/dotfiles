@@ -285,7 +285,7 @@ brew install fondu ttf2pt1
 ######################################################################
 brew install ghc cabal-install pandoc
 brew cask install emacs
-brew install languagetool ctags global
+brew install languagetool ctags global aspell
 ######################################################################
 # Communications stuff
 ######################################################################
