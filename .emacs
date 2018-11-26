@@ -1,3 +1,5 @@
+;; Adam's .emacs file
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq x-select-enable-clipboard t)
 (setq mac-command-modifier 'meta)
 (setq mac-option-modifier 'meta)
@@ -8,10 +10,6 @@
 
 (require 'package) ;; You might already have this line
 (package-initialize) ;; You might already have this line
-; (when (not package-archive-contents)
-                                        ;   (package-refresh-contents))
-;; (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-;; (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
 (when (memq window-system '(mac ns x))
   (exec-path-from-shell-initialize))
 
@@ -38,15 +36,6 @@
 (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
 (setq reftex-plug-into-AUCTeX t)
 (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; set XeTeX mode in TeX/LaTeX
-;; (add-hook 'LaTeX-mode-hook 
-;;           (lambda()
-;;              (add-to-list 'TeX-command-list '("XeLaTeX" "%`xelatex%(mode)%' %t" TeX-run-TeX nil t))
-;;              (setq TeX-command-default "XeLaTeX")
-;;              (setq TeX-save-query nil)
-;;              (setq TeX-show-compilation nil)))
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (autoload 'longlines-mode
    "longlines.el"
@@ -61,12 +50,6 @@
 	(concat "/usr/local/texlive/texmf-local" ":"
 		(concat "/usr/local/texlive/2017/texmf-dist"
   (getenv "TEXMFMAIN"))))
-
-(add-hook 'TeX-mode-hook
-    (lambda ()
-        (add-to-list 'TeX-output-view-style
-            '("^pdf$" "."
-              "/Applications/Skim.app/Contents/SharedSupport/displayline %n %o %b"))))
 
 ;; Use PDF mode by default
 (setq-default TeX-PDF-mode t)
@@ -106,9 +89,6 @@
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-ca" 'org-agenda)
 (global-font-lock-mode 1)
-
-;; Turn on nxhtml.
-;; (load "~/.emacs.d/nxhtml/autostart.el")
 
 ;; Turn on ps-print.
 (require 'lpr)
@@ -160,46 +140,10 @@
 ;; Turn off shell mode bold text from previous commands.
 (setq comint-highlight-input nil)
 
-;; ;; Remove completion buffer when done
-;; (add-hook 'minibuffer-exit-hook
-;;      '(lambda ()
-;;         (let ((buffer "*Completions*"))
-;;           (and (get-buffer buffer)
-;;            (kill-buffer buffer)))))
-
-;; (let ((trustfile
-;;        (replace-regexp-in-string
-;;         "\\\\" "/"
-;;         (replace-regexp-in-string
-;;          "\n" ""
-;;          (shell-command-to-string "python -m certifi")))))
-;;   (setq tls-program
-;;         (list
-;;          (format "gnutls-cli%s --x509cafile %s -p %%p %%h"
-;;                  (if (eq window-system 'w32) ".exe" "") trustfile)))
-;;   (setq gnutls-verify-error t)
-;;   (setq gnutls-trustfiles (list trustfile)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;(let ((bad-hosts
-;;       (loop for bad
-;;             in `("https://wrong.host.badssl.com/"
-;;                  "https://self-signed.badssl.com/")
-;;             if (condition-case e
-;;                    (url-retrieve
-;;                     bad (lambda (retrieved) t))
-;;                  (error nil))
-;;             collect bad)))
-;;  (if bad-hosts
-;;      (error (format "tls misconfigured; retrieved %s ok"
-;;                     bad-hosts))
-;;    (url-retrieve "https://badssl.com"
-;;                  (lambda (retrieved) t))))
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+;; Langtool: fix spelling errors for text mode
 (require 'langtool)
-(when (memq window-system '(mac ns x))
-  (setq langtool-java-tool-jar "/usr/local/Cellar/languagetool/4.3/libexec/languagetool.jar"))
+(setq langtool-java-tool-jar "/usr/local/Cellar/languagetool/4.3/libexec/languagetool.jar")
+(setq langtool-bin "/usr/local/bin/languagetool")
 (setq langtool-default-language "en-US")
 (setq langtool-mother-tongue "en")
 (setq sentence-end-double-space nil)
@@ -310,7 +254,7 @@
 (projectile-global-mode)
 (setq projectile-enable-caching t)
 (setq projectile-completion-system 'helm)
-(helm-projectile-on)
+;; (helm-projectile-on)
 
 ;; Helm with Gtags
 (setq
@@ -364,6 +308,7 @@
   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
   (add-hook 'elpy-mode-hook 'flycheck-mode))
 (require 'flycheck)
+(global-flycheck-mode)
 (blink-cursor-mode 0)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -381,7 +326,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  Change theme based on time of day
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (setq calendar-location-name "Columbus, OH") 
+;; (setq calendar-location-name "Columbus, OH")
 ;; (setq calendar-latitude 39.9)
 ;; (setq calendar-longitude -82.8)
 ;; (require 'theme-changer)
@@ -595,3 +540,5 @@
  '(variable-pitch ((t (:family "Arimo"))))
  '(warning ((t (:background "#F6EBBC")))))
 
+(provide '.emacs)
+;;; .emacs ends here
