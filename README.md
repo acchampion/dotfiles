@@ -12,3 +12,4 @@ License
 Contributions
 =============
 * Adapted from [Mathias Bynens' dotfiles](https://github.com/mathiasbynens/dotfiles) 
+* Terminal config from [FreeCodeCamp](https://medium.freecodecamp.org/jazz-up-your-bash-terminal-a-step-by-step-guide-with-pictures-80267554cb22)
