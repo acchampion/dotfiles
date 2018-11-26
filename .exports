@@ -44,7 +44,7 @@ fi
 # Set Android NDK and compilation vars
 export ANDROID_SDK_ROOT=/usr/local/share/android-sdk
 export ANDROID_NDK_HOME=/usr/local/share/android-ndk
-export ANDROID_SDK_TOOLS="~/android-sdk-tools"
+export ANDROID_HOME=$ANDROID_SDK_ROOT
 # export GSTREAMER_SDK_ROOT_ANDROID=~/gstreamer-sdk-android-arm-debug-2013.6
 export USE_CCACHE=1
 export MKL_NUMBER_THREADS=1
@@ -68,7 +68,7 @@ GO_PATH=/usr/local/opt/go/libexec/bin
 FLUTTER_PATH=~/flutter/bin
 
 export MANPATH=$BREW_GNU_COREUTILS_MANPATH:$BREW_GNU_FINDUTILS_MANPATH:$BREW_GNU_SED_MANPATH:$MANPATH
-export PYTHONPATH="/usr/local/lib/python3.6/site-packages:$PYTHONPATH"
+export PYTHONPATH="/usr/local/lib/python3.7/site-packages:$PYTHONPATH"
 export KDEDIRS=$KDEDIRS:$HOME/Library/Preferences/KDE:/usr/local/kde4
 export PATH="/usr/local/kde4/bin:~/bin:/bin:/sbin:/opt/X11/bin:/usr/local/sbin:/usr/local/bin:$BREW_GNU_COREUTILS_PATH:$BREW_GNU_FINDUTILS_PATH:$BREW_GNU_SED_PATH:$TEX_PATH:/usr/bin:/usr/sbin:$ANDROID_SDK_ROOT:$ANDROID_NDK_HOME:$ANDROID_SDK_TOOLS:$ANDROID_SDK_TOOLS/bin:/usr/local/mysql/bin:$GO_PATH:$FLUTTER_PATH:$PATH:$FDK_EXE"
 export JAVA_HOME=`/usr/libexec/java_home`
