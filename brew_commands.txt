@@ -64,7 +64,7 @@ export FC=/usr/local/bin/gfortran
 brew install sqlite --with-functions
 brew install gdbm --with-libgdbm-compat
 brew install makedepend openssl python@2
-brew install xz python3
+brew install xz python
 ######################################################################
 # Begin: GDB: Generate a certificate 'gdb-cert' to code-sign gdb if
 # you haven't already. Use macOS's Keychain Manager app to do so.
@@ -96,16 +96,16 @@ brew install ack asciidoc zmq md5sha1sum
 ######################################################################
 # Note: Oracle has changed licensing and support for Java/JDK. Each
 # new version of the JDK is only supported for 6 months, except
-# long-term support versions. I'm using OpenJDK 11 from here on out.
+# long-term support versions. The Android SDK requires Java 8.
 ######################################################################
 brew tap caskroom/cask
-brew cask install java iterm2 xquartz google-chrome firefox
+brew cask install java8 iterm2 xquartz google-chrome firefox
 ######################################################################
 # Boost and MPI support (for multicore architectures)
 ######################################################################
 brew install swig popt sphinx-doc
 brew install cmake doxygen boost-build libevent
-brew install open-mpi --with-cxx-bindings --with-mpi-thread-multiple
+brew install open-mpi --with-cxx-bindings
 brew install tbb
 brew install boost --without-single
 brew install boost-mpi
@@ -128,7 +128,7 @@ brew install rtmpdump # Needed to stream RTMP (curl)
 brew install spdylay # Needed for HTTP/2 (curl)
 brew install jansson # Needed for HTTP/2 (curl)
 brew install jemalloc libev libidn libmetalink libidn2
-brew install wget --with-gpgme --with-libmetalink --with-pcre
+brew install wget
 brew install curl --with-c-ares --with-gssapi --with-libssh2 \
      --with-libmetalink --with-nghttp2 --with-rtmpdump
 brew install lynx
@@ -194,7 +194,8 @@ brew cask install aquaterm
 ######################################################################
 brew install ivy
 brew install ant --with-bcel --with-ivy
-brew install gradle maven scala brew install leiningen kotlin
+brew install gradle maven scala
+brew install leiningen kotlin
 ######################################################################
 # Image and video manipulation libraries and tools. Note: You are
 # responsible for complying with all applicable laws in your region
@@ -209,11 +210,8 @@ brew install ghostscript --with-x11
 brew install epstool gl2ps intltool pixman psutils
 brew install groff --with-grohtml --with-gropdf
 brew install openjpeg
-brew install webp liblqr gd libwmf ilmbase openexr lame mp3gain yasm \
-     x264 chromaprint frei0r game-music-emu fribidi libass libgsm \
-     libmodplug libsoxr libvidstab libogg libvorbis flac libsndfile \
-     libbs2b
-brew install libvpx --with-visualizer
+brew install webp gd ilmbase openexr lame mp3gain x264 chromaprint \
+     libsoxr libogg libvorbis flac libsndfile libvpx
 brew install opencore-amr nasm openh264 opus sdl2 speex libebur128 \
      orc schroedinger theora wavpack x265 zimg berkeley-db
 brew install libsamplerate --with-fftw --with-libsndfile
@@ -239,21 +237,19 @@ brew install libsvg-cairo perl vala libsoup itstool \
      icon-naming-utils adwaita-icon-theme pygobject py2cairo pygtk \
      gtk-mac-integration glade libglade gtkmm libglademm
 brew install imagemagick --with-fftw --with-fontconfig \
-     --with-ghostscript --with-hdri --with-libheif --with-liblqr \
-     --with-librsvg --with-libwmf --with-little-cms --with-openexr \
+     --with-ghostscript --with-libheif --with-librsvg --with-openexr \
      --with-pango
 brew install imagemagick@6 --with-fftw --with-fontconfig \
-     --with-ghostscript --with-hdri --with-liblqr --with-librsvg \
-     --with-libwmf --with-little-cms --with-openexr --with-pango
-brew install graphicsmagick --with-ghostscript --with-libwmf \
-     --with-little-cms2 --with-perl --with-webp
+     --with-ghostscript --with-librsvg --with-openexr --with-pango
+brew install graphicsmagick --with-ghostscript --with-little-cms2 \
+     --with-perl --with-webp
 brew install svg2pdf speexdsp
 brew install pulseaudio --with-glib
-brew install gstreamer gst-plugins-base flac aalib libcaca
+brew install gstreamer gst-plugins-base
 brew install gst-plugins-good --with-aalib --with-gdk-pixbuf \
      --with-jack --with-libcaca --with-libdv --with-pulseaudio
 brew install libssh lua luajit geoipupdate geoip go hub libsmi \
-     portaudio gtk-chtheme gtk-engines gtk-murrine-engine
+     portaudio gtk-chtheme gtk-engines
 ######################################################################
 # Install poppler and inkscape
 ######################################################################
@@ -275,7 +271,7 @@ brew install octave --with-qt
 ######################################################################
 # Python stuff
 ######################################################################
-brew install oniguruma jq sip numpy scipy ffmpeg
+brew install oniguruma jq sip numpy scipy
 ######################################################################
 # Font stuff
 ######################################################################
@@ -284,20 +280,20 @@ brew install fondu ttf2pt1
 # Pandoc and Emacs
 ######################################################################
 brew install ghc cabal-install pandoc
+brew install languagetool ctags global
 brew cask install emacs
-brew install languagetool ctags global aspell
 ######################################################################
 # Communications stuff
 ######################################################################
 brew tap pothosware/pothos
 brew install hamlib minicom minimodem librtlsdr soapysdr soapyrtlsdr
 brew install --HEAD libosmosdr
-brew install muparserx pothos wxwidgets limesuite
+brew install muparserx pothos wxwidgets
 ######################################################################
 # Build OpenCV on macOS
 ######################################################################
 # brew cask install nvidia-cuda
-brew install sdl libdc1394 opencv opencv@2
+brew install opencv opencv@2
 ######################################################################
 # OSXFUSE with SSHFS
 ######################################################################
@@ -308,7 +304,7 @@ brew install sshfs
 ######################################################################
 brew install libpq gdal zstd
 brew install postgis --with-protobuf-c
-brew install mapnik --with-cairo --with-gdal --with-postgresql
+# brew install mapnik --with-cairo --with-gdal --with-postgresql
 ######################################################################
 # Perlbrew
 ######################################################################
