@@ -4,7 +4,6 @@
 # Inspiration: https://github.com/mathiasbynens/dotfiles
 ######################################################################
 
-alias stdlogin='ssh -Y champion@stdlogin.cse.ohio-state.edu'
 alias stdlinux='ssh -X -o "UserKnownHostsFile /dev/null" champion.17@stdlinux.cse.ohio-state.edu'
 alias champcse='ssh -Y champion@champion.cse.ohio-state.edu'
 alias ll='ls -al --color=auto'
