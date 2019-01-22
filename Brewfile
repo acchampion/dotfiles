@@ -421,6 +421,7 @@ brew "global"
 brew "cppcheck"
 brew "cscope"
 brew "tidy-html5"
+brew "node"
 brew "jsonlint"
 cask "emacs"
 
