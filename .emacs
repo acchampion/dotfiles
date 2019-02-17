@@ -216,7 +216,7 @@
       helm-scroll-amount 8 ; scroll 8 lines other window using M-<next>/M-<prior>
       helm-ff-file-name-history-use-recentf t
       helm-quick-update t
-      helm-candidate-number-limit 100
+      helm-candidate-number-limit 20
       helm-ff-skip-boring-files t)
 (global-set-key (kbd "M-x") 'helm-M-x)
 (setq helm-M-x-fuzzy-match t) ;; optional fuzzy matching for helm-M-x
@@ -436,7 +436,7 @@
  '(package-enable-at-startup t)
  '(package-selected-packages
    (quote
-    (powerline dart-mode company-irony company-irony-c-headers flycheck-irony use-package smartparens yasnippet function-args sr-speedbar x86-lookup helm-projectile projectile company-shell company-web csv-mode exec-path-from-shell auctex web-beautify company-math flyspell-correct-helm counsel ivy helm-gtags theme-changer writegood-mode wc-mode swift-mode solarized-theme org minimap langtool helm flymake-shell flymake-python-pyflakes ess elpy ecb color-theme-solarized color-theme)))
+    (flymake-css flymake-json powerline dart-mode company-irony company-irony-c-headers flycheck-irony use-package smartparens yasnippet function-args sr-speedbar x86-lookup helm-projectile projectile company-shell company-web csv-mode exec-path-from-shell auctex web-beautify company-math flyspell-correct-helm counsel ivy helm-gtags theme-changer writegood-mode wc-mode swift-mode solarized-theme org minimap langtool helm flymake-shell flymake-python-pyflakes ess elpy ecb color-theme-solarized color-theme)))
  '(powerline-gui-use-vcs-glyph t)
  '(preview-file "emacs-enscript.ps")
  '(ps-always-build-face-reference t)
