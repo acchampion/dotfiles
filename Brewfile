@@ -10,12 +10,9 @@ tap "homebrew/cask-drivers"
 tap "homebrew/cask-fonts"
 tap "homebrew/cask-versions"
 tap "homebrew/core"
-tap "homebrew/emacs"
-tap "homebrew/fuse"
-tap "homebrew/science"
 tap "homebrew/services"
-tap "homebrew/versions"
 tap "pothosware/pothos"
+tap "srkomodo/tap"
 
 # Homebrew packages: GNU tools for macOS
 brew "coreutils"
@@ -122,13 +119,12 @@ brew "libusb-compat"
 brew "gpgme"
 brew "gnupg"
 
-# ASCII docs, MD5/SHA-1 hashes, Markdown, Gperf
+# ASCII docs, Markdown, Gperf
 brew "rename"
 brew "tree"
 brew "ack"
 brew "asciidoc"
 brew "zeromq"
-brew "md5sha1sum"
 brew "markdown"
 brew "gperf"
 brew "gperftools"
