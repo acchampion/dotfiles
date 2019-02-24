@@ -87,7 +87,7 @@ brew install libgpg-error libgcrypt libksba libassuan pinentry pth \
 ######################################################################
 brew install rename tree unzip
 brew install vim --with-override-system-vi
-brew install ack asciidoc zmq md5sha1sum
+brew install ack asciidoc zmq
 ######################################################################
 # Install Brew Cask and apps: Java, XQuartz, iTerm2, Chrome, Firefox.
 # Users are responsible for compliance with software license
