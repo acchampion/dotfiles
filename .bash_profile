@@ -16,8 +16,12 @@ source ~/.exports
 # source ~/perl5/perlbrew/etc/bashrc
 # source ~/.phpbrew/bashrc
 
-if [ -f $(brew --prefix)/share/bash-completion/bash_completion ]; then
-    . $(brew --prefix)/share/bash-completion/bash_completion
+# I hard-coded the Homebrew prefix, /usr/local, to speed up
+# the shell launch.
+BREW_PREFIX="/usr/local"
+if [ -f $BREW_PREFIX/share/bash-completion/bash_completion ]; then
+   export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
+   source $BREW_PREFIX/share/bash-completion/bash_completion
 fi
 
 # Modify PROMPT_COMMAND each time a command is run.
@@ -40,3 +44,4 @@ powerline-daemon -q
 POWERLINE_BASH_CONTINUATION=1
 POWERLINE_BASH_SELECT=1
 source /usr/local/lib/python3.7/site-packages/powerline/bindings/bash/powerline.sh
+

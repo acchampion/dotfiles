@@ -45,20 +45,21 @@ fi
 export ANDROID_SDK_ROOT=/usr/local/share/android-sdk
 export ANDROID_NDK_HOME=/usr/local/share/android-ndk
 export ANDROID_HOME=$ANDROID_SDK_ROOT
-# export GSTREAMER_SDK_ROOT_ANDROID=~/gstreamer-sdk-android-arm-debug-2013.6
 export USE_CCACHE=1
 export MKL_NUMBER_THREADS=1
 export REPO_TRACE=1
 export BUILD_MAC_SDK_EXPERIMENTAL=1
 
-
-# Paths
-BREW_EXEC=/usr/local/bin/brew
-BREW_GNU_COREUTILS_ROOT="$(/usr/local/bin/brew --prefix coreutils)"
+# Paths. I hard-coded the GNU paths to speed up shell performance.
+# (Each 'brew' invocation took about a second.) If Homebrew changes
+# paths in the future, make sure to update this code!
+BREW_PREFIX="/usr/local"
+BREW_EXEC="$BREW_PREFIX/bin/brew"
+BREW_GNU_COREUTILS_ROOT="/usr/local/opt/coreutils"
 BREW_GNU_COREUTILS_PATH="$BREW_GNU_COREUTILS_ROOT/libexec/gnubin"
-BREW_GNU_FINDUTILS_ROOT="$(/usr/local/bin/brew --prefix findutils)"
+BREW_GNU_FINDUTILS_ROOT="/usr/local/opt/findutils"
 BREW_GNU_FINDUTILS_PATH="$BREW_GNU_FINDUTILS_PATH/libexec/gnubin"
-BREW_GNU_SED_ROOT="$(/usr/local/bin/brew --prefix gnu-sed)"
+BREW_GNU_SED_ROOT="/usr/local/opt/gnu-sed"
 BREW_GNU_SED_PATH="$BREW_GNU_SED_ROOT/libexec/gnubin"
 BREW_GNU_COREUTILS_MANPATH="$BREW_GNU_COREUTILS_ROOT/libexec/gnuman"
 BREW_GNU_FINDUTILS_MANPATH="$BREW_GNU_FINDUTILS_ROOT/libexec/gnuman"
@@ -70,13 +71,13 @@ FLUTTER_PATH=~/flutter/bin
 export MANPATH=$BREW_GNU_COREUTILS_MANPATH:$BREW_GNU_FINDUTILS_MANPATH:$BREW_GNU_SED_MANPATH:$MANPATH
 export PYTHONPATH="/usr/local/lib/python3.7/site-packages:$PYTHONPATH"
 export KDEDIRS=$KDEDIRS:$HOME/Library/Preferences/KDE:/usr/local/kde4
-export PATH="/usr/local/kde4/bin:~/bin:/bin:/sbin:/opt/X11/bin:/usr/local/sbin:/usr/local/bin:$BREW_GNU_COREUTILS_PATH:$BREW_GNU_FINDUTILS_PATH:$BREW_GNU_SED_PATH:$TEX_PATH:/usr/bin:/usr/sbin:$ANDROID_SDK_ROOT:$ANDROID_NDK_HOME:$ANDROID_SDK_TOOLS:$ANDROID_SDK_TOOLS/bin:/usr/local/mysql/bin:$GO_PATH:$FLUTTER_PATH:$PATH:$FDK_EXE"
+export PATH="/usr/local/kde4/bin:~/bin:/opt/X11/bin:/usr/local/sbin:/usr/local/bin:$BREW_GNU_COREUTILS_PATH:$BREW_GNU_FINDUTILS_PATH:$BREW_GNU_SED_PATH:$TEX_PATH:$ANDROID_SDK_ROOT:$ANDROID_NDK_HOME:/usr/local/mysql/bin:$GO_PATH:$FLUTTER_PATH:$PATH"
 export JAVA_HOME=`/usr/libexec/java_home`
 launchctl setenv DYLD_LIBRARY_PATH /usr/local/kde4/lib:$DYLD_LIBRARY_PATH
 export XDG_DATA_HOME=$HOME/Library/Preferences/KDE/share
 export XDG_DATA_DIRS=/usr/local/kde4/share:/usr/local/share:/usr/share
 
-export FDK_EXE="~/bin/FDK/Tools/osx"
+# export FDK_EXE="~/bin/FDK/Tools/osx"
 export SVN_EDITOR=vim
 export FC=/usr/local/bin/gfortran
 export GNUTERM=aqua
