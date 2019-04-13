@@ -143,8 +143,10 @@ brew install tcpdump --with-libpcap
 brew install socat telnet apktool dex2jar smali gperf ccache \
      gperftools markdown
 brew cask install wireshark
-brew install libplist usbmuxd libzip libimobiledevice \
-     ideviceinstaller ios-deploy cocoapods scrcpy
+brew install libplist
+brew install --HEAD usbmuxd
+brew install --HEAD libimobiledevice
+brew install ideviceinstaller ios-deploy cocoapods
 ######################################################################
 # More networking- and security-related binaries
 ######################################################################
