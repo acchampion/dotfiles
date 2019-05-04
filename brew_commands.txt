@@ -87,19 +87,27 @@ brew install libgpg-error libgcrypt libksba libassuan pinentry pth \
 ######################################################################
 brew install rename tree unzip
 brew install vim --with-override-system-vi
-brew install ack asciidoc zmq
+brew install ack asciidoc zmq md5sha1sum
 ######################################################################
 # Install Brew Cask and apps: Java, XQuartz, iTerm2, Chrome, Firefox.
 # Users are responsible for compliance with software license
 # agreements, including paying for licenses as required
 # (e.g., for Path Finder and Omni Group apps).
 ######################################################################
-# Note: Oracle has changed licensing and support for Java/JDK. Each
+# Note: Oracle has changed licensing and support for Java's JDK. Each
 # new version of the JDK is only supported for 6 months, except
-# long-term support versions. The Android SDK requires Java 8.
+# long-term support versions. The Android SDK requires Java 8. You can
+# ensure that Java 8 is found when java_home is run via:
+# mv /Library/Java/JavaVirtualMachines/<JDK11+>/Contents/Info.plist \
+#   /Library/Java/JavaVirtualMachines/<JDK11+>/Contents/Info.plist.off
+# where <JDK11+> is the corresponding directory for Java 11+.
+# Source: https://stackoverflow.com/questions/49630165/
+#   how-to-configure-unity-2017-4-to-target-android-and-avoid-build-
+#   failures-on-osx/49630166#49630166
 ######################################################################
 brew tap caskroom/cask
-brew cask install java8 iterm2 xquartz google-chrome firefox
+brew cask install java adoptopenjdk8 iterm2 xquartz google-chrome \
+     firefox
 ######################################################################
 # Boost and MPI support (for multicore architectures)
 ######################################################################
@@ -143,10 +151,8 @@ brew install tcpdump --with-libpcap
 brew install socat telnet apktool dex2jar smali gperf ccache \
      gperftools markdown
 brew cask install wireshark
-brew install libplist
-brew install --HEAD usbmuxd
-brew install --HEAD libimobiledevice
-brew install ideviceinstaller ios-deploy cocoapods
+brew install libplist usbmuxd libzip libimobiledevice \
+     ideviceinstaller ios-deploy cocoapods scrcpy
 ######################################################################
 # More networking- and security-related binaries
 ######################################################################
@@ -324,22 +330,17 @@ brew install postgis --with-protobuf-c
 # check the font license terms.
 ######################################################################
 brew tap caskroom/fonts
-brew cask install font-aleo font-archivo-narrow font-arimo \
-     font-bitter font-butler font-carrois-gothic \
-     font-carrois-gothic-sc font-charis-sil font-clear-sans \
-     font-cooper-hewitt font-cousine font-dejavu-sans font-fira-mono \
-     font-fira-sans font-freesans font-gentium-book-basic font-go \
-     font-go-mono font-hack font-ibm-plex font-lato \
-     font-league-gothic font-libertinus font-libre-baskerville \
-     font-libre-caslon-text font-libre-caslon-display \
-     font-libre-franklin font-menlo-for-powerline font-montserrat \
-     font-noto-sans font-noto-sans-mono font-noto-serif \
-     font-office-code-pro font-open-sans font-oswald \
-     font-playfair-display font-powerline-symbols font-roboto \
-     font-roboto-mono font-signika font-sorts-mill-goudy \
-     font-source-code-pro font-source-sans-pro font-source-serif-pro \
-     font-spectral font-stix font-tinos font-ubuntu font-urw-base35 \
-     font-zilla-slab
+brew cask install font-archivo-narrow font-arimo font-charis-sil \
+    font-clear-sans font-cooper-hewitt font-cousine font-dejavu-sans \
+    font-fira-mono font-fira-sans font-freesans \
+    font-gentium-book-basic font-go font-go-mono font-hack \
+    font-ibm-plex font-lato font-libertinus font-menlo-for-powerline \
+    font-montserrat font-noto-sans font-noto-sans-mono font-noto-serif \
+    font-open-sans font-oswald font-playfair-display \
+    font-powerline-symbols font-roboto font-roboto-mono font-signika \
+    font-sorts-mill-goudy font-source-code-pro font-source-sans-pro \
+    font-source-serif-pro font-spectral font-stix font-tinos \
+    font-ubuntu font-urw-base35 font-zilla-slab
 ######################################################################
 # More Homebrew Cask Apps.
 ######################################################################

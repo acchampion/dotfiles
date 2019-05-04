@@ -4,6 +4,7 @@
 (setq x-select-enable-clipboard t)
 (setq mac-command-modifier 'meta)
 (setq mac-option-modifier 'meta)
+(setq ns-function-modifier 'meta)
 (scroll-bar-mode -1)
 (add-to-list 'load-path "~/.emacs.d/lisp")
 (add-to-list 'load-path "~/.emacs.d/elpa")
@@ -12,6 +13,8 @@
 
 (require 'package) ;; You might already have this line
 (package-initialize) ;; You might already have this line
+(advice-add 'python-mode :before 'elpy-enable)
+
 (when (memq window-system '(mac ns x))
   (exec-path-from-shell-initialize))
 
@@ -50,7 +53,7 @@
 ;; (getenv "PATH")))))
 (setenv "TEXMFMAIN"
 	(concat "/usr/local/texlive/texmf-local" ":"
-		(concat "/usr/local/texlive/2017/texmf-dist"
+		(concat "/usr/local/texlive/2019/texmf-dist"
   (getenv "TEXMFMAIN"))))
 
 ;; Use PDF mode by default
@@ -144,7 +147,7 @@
 
 ;; Langtool: fix spelling errors for text mode
 (require 'langtool)
-(setq langtool-java-tool-jar "/usr/local/Cellar/languagetool/4.3/libexec/languagetool.jar")
+(setq langtool-java-tool-jar "/usr/local/Cellar/languagetool/4.5/libexec/languagetool.jar")
 (setq langtool-bin "/usr/local/bin/languagetool")
 (setq langtool-default-language "en-US")
 (setq langtool-mother-tongue "en")
@@ -156,6 +159,7 @@
 (setq ediff-diff-options "-w"
       ediff-split-window-function 'split-window-horizontally
       ediff-window-setup-function 'ediff-setup-windows-plain)
+
 (require 'cedet)
 (require 'compile)
 (require 'cc-mode)
@@ -219,22 +223,22 @@
       helm-candidate-number-limit 20
       helm-ff-skip-boring-files t)
 (global-set-key (kbd "M-x") 'helm-M-x)
-(setq helm-M-x-fuzzy-match t) ;; optional fuzzy matching for helm-M-x
+;; (setq helm-M-x-fuzzy-match t) ;; optional fuzzy matching for helm-M-x
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 (global-set-key (kbd "C-x b") 'helm-mini)
-(setq helm-buffers-fuzzy-matching t
-      helm-recentf-fuzzy-match t)
+;; (setq helm-buffers-fuzzy-matching t
+;;       helm-recentf-fuzzy-match t)
 (global-set-key (kbd "C-x C-f") 'helm-find-files)
-(when (executable-find "ack-grep")
-  (setq helm-grep-default-command "ack-grep -Hn --no-group --no-color %e %p %f"
-        helm-grep-default-recurse-command "ack-grep -H --no-group --no-color %e %p %f"))
-(setq helm-semantic-fuzzy-match t
-      helm-imenu-fuzzy-match    t)
+(when (executable-find "ack")
+  (setq helm-grep-default-command "ack -Hn --no-group --no-color %e %p %f"
+        helm-grep-default-recurse-command "ack -H --no-group --no-color %e %p %f"))
+;; (setq helm-semantic-fuzzy-match t
+;;     helm-imenu-fuzzy-match    t)
 (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
-(setq helm-locate-fuzzy-match t)
+;; (setq helm-locate-fuzzy-match t)
 (global-set-key (kbd "C-c h o") 'helm-occur)
-(setq helm-apropos-fuzzy-match t)
-(setq helm-lisp-fuzzy-completion t)
+;; (setq helm-apropos-fuzzy-match t)
+;; (setq helm-lisp-fuzzy-completion t)
 (global-set-key (kbd "C-h SPC") 'helm-all-mark-rings)
 (global-set-key (kbd "C-c h x") 'helm-register)
 (global-set-key (kbd "C-c h g") 'helm-google-suggest)
@@ -256,16 +260,16 @@
 (projectile-global-mode)
 (setq projectile-enable-caching t)
 (setq projectile-completion-system 'helm)
+(setq projectile-indexing-method 'alien)
 ;; (helm-projectile-on)
 
 ;; Helm with Gtags
-(setq
- helm-gtags-ignore-case t
- helm-gtags-auto-update t
- helm-gtags-use-input-at-cursor t
- helm-gtags-pulse-at-cursor t
- helm-gtags-prefix-key "C-c g"
- helm-gtags-suggested-key-mapping t
+(setq  helm-gtags-ignore-case t
+       helm-gtags-auto-update t
+       helm-gtags-use-input-at-cursor t
+       helm-gtags-pulse-at-cursor t
+       helm-gtags-prefix-key "C-c g"
+       helm-gtags-suggested-key-mapping t
  )
 
 (require 'helm-gtags)
@@ -286,7 +290,7 @@
 (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
 
 ;; Miscellany
-;; (setq gc-cons-threshold 10000000)
+;; (setq gc-cons-threshold 1000000)
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;; UTF-8 (http://pages.sachachua.com/.emacs.d/Sacha.html)
@@ -303,37 +307,22 @@
 ;;(add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
 (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
 
-(global-linum-mode t) ;; enable line numbers globally
-(setq linum-format "%d ")
-(elpy-enable)
-(when (require 'flycheck nil t)
-  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-  (add-hook 'elpy-mode-hook 'flycheck-mode))
 (require 'flycheck)
 (global-flycheck-mode)
 (setq flycheck-chktexrc "~/.chktexrc")
 (blink-cursor-mode 0)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Enable CPerlMode for Perl scripts
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (mapc
-;;      (lambda (pair)
-;;        (if (eq (cdr pair) 'perl-mode)
-;;            (setcdr pair 'cperl-mode)))
-;;      (append auto-mode-alist interpreter-mode-alist))
-;; (setq cperl-font-lock t)
-;; (setq cperl-electric-keywords t)
+(global-linum-mode t) ;; enable line numbers globally
+(setq linum-format "%d ")
+
+;; (elpy-enable)
+(when (require 'flycheck nil t)
+  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+  (add-hook 'elpy-mode-hook 'flycheck-mode))
+(setq elpy-rpc-python-command "python3")
+
 (require 'perl-use-utf8-coding)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  Change theme based on time of day
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (setq calendar-location-name "Columbus, OH")
-;; (setq calendar-latitude 39.9)
-;; (setq calendar-longitude -82.8)
-;; (require 'theme-changer)
-;; (change-theme 'solarized-light 'solarized-dark)
 (setq speedbar-show-unknown-files t)
 (require 'yasnippet)
 (yas-global-mode 1)
@@ -421,11 +410,12 @@
  '(fringe-mode (quote (nil . 0)) nil (fringe))
  '(inhibit-startup-screen t)
  '(line-numbers-p t)
+ '(ns-function-modifier (quote meta))
  '(org-agenda-export-html-style nil t)
  '(org-export-html-style-include-default nil t)
  '(org-highlight-latex-and-related (quote (latex script entities)))
- '(org-html-head-include-default-style nil t)
- '(org-html-head-include-scripts nil t)
+ '(org-html-head-include-default-style nil)
+ '(org-html-head-include-scripts nil)
  '(org-startup-folded (quote showeverything))
  '(package-archives
    (quote
@@ -449,6 +439,7 @@
      (shadow-color . 0.0))))
  '(ps-spool-duplex t)
  '(ps-spool-tumble t)
+ '(python-shell-interpreter "python3")
  '(show-paren-mode t)
  '(size-indication-mode t)
  '(solarized-broken-srgb t)

@@ -1,2 +1,8 @@
 pip3 install powerline-status
 pip3 install powerline-gitstatus
+pip3 install jedi
+pip3 install autopep8
+pip3 install flake8
+pip3 install yapf
+pip3 install black
+pip3 install rope
