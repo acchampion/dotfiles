@@ -54,6 +54,10 @@ brew install autoconf autoconf-archive automake screen git watch wdiff
 ######################################################################
 brew install bash bash-completion2
 ######################################################################
+# Install zsh with completions
+######################################################################
+brew install zsh zsh-completion
+######################################################################
 # Install gcc without multilib for OpenMP support; also veclibfort
 ######################################################################
 brew install libmpc isl gcc veclibfort
@@ -257,7 +261,7 @@ brew install gstreamer gst-plugins-base
 brew install gst-plugins-good --with-aalib --with-gdk-pixbuf \
      --with-jack --with-libcaca --with-libdv --with-pulseaudio
 brew install libssh lua luajit geoipupdate geoip go hub libsmi \
-     portaudio gtk-chtheme gtk-engines
+     portaudio gtk-chtheme
 ######################################################################
 # Install poppler and inkscape
 ######################################################################
