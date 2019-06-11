@@ -25,8 +25,7 @@
 ######################################################################
 brew install coreutils binutils diffutils lzip
 brew install ed --with-default-names
-brew install findutils --with-default-names
-brew install gettext gnu-getopt
+brew install findutils gettext gnu-getopt
 brew install gnu-indent --with-default-names
 brew install gnu-sed --with-default-names
 brew install gnu-tar --with-default-names
@@ -339,8 +338,8 @@ brew cask install font-archivo-narrow font-arimo font-charis-sil \
     font-fira-mono font-fira-sans font-freesans \
     font-gentium-book-basic font-go font-go-mono font-hack \
     font-ibm-plex font-lato font-libertinus font-menlo-for-powerline \
-    font-montserrat font-noto-sans font-noto-sans-mono font-noto-serif \
-    font-open-sans font-oswald font-playfair-display \
+    font-montserrat font-noto-sans font-noto-sans-mono \
+    font-noto-serif font-open-sans font-oswald font-playfair-display \
     font-powerline-symbols font-roboto font-roboto-mono font-signika \
     font-sorts-mill-goudy font-source-code-pro font-source-sans-pro \
     font-source-serif-pro font-spectral font-stix font-tinos \
