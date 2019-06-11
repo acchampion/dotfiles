@@ -357,9 +357,9 @@ brew cask install android-file-transfer android-ndk \
      box-sync calibre clamxav cyberduck dropbox fiji virtualbox
 brew cask install genymotion
 brew cask install gfxcardstatus gimp google-earth-pro graphsketcher \
-     ibackupbot jd-gui libreoffice marble max megasync mendeley \
+     ibackupbot jd-gui libreoffice marble megasync mendeley \
      mp3gain-express mysqlworkbench omnidisksweeper omnifocus \
      omnigraffle pacifist path-finder pgadmin4 processing qcad
-brew cask install scribus skim skype soapui sourcetree teamviewer \
-     texmaker tabula thunderbird tor-browser transmission \
-     visual-studio-code vlc weka
+brew cask install skim skype soapui sourcetree teamviewer texmaker \
+     tabula thunderbird tor-browser transmission visual-studio-code \
+     vlc weka
