@@ -26,6 +26,9 @@ source ~/.exports
 # Activate zsh completions
 fpath=(/usr/local/share/zsh-completions $fpath)
 
+autoload -Uz compinit
+compinit
+
 export DEFAULT_USER=$USER
 # not currently being used, but necessary to display the right user context in my prompt
 
