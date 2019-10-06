@@ -147,7 +147,7 @@
 
 ;; Langtool: fix spelling errors for text mode
 (require 'langtool)
-(setq langtool-java-tool-jar "/usr/local/Cellar/languagetool/4.5/libexec/languagetool.jar")
+(setq langtool-java-tool-jar "/usr/local/Cellar/languagetool/4.7/libexec/languagetool.jar")
 (setq langtool-bin "/usr/local/bin/languagetool")
 (setq langtool-default-language "en-US")
 (setq langtool-mother-tongue "en")
@@ -316,9 +316,6 @@
 (setq linum-format "%d ")
 
 ;; (elpy-enable)
-(when (require 'flycheck nil t)
-  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-  (add-hook 'elpy-mode-hook 'flycheck-mode))
 (setq elpy-rpc-python-command "python3")
 
 (require 'perl-use-utf8-coding)
@@ -411,11 +408,11 @@
  '(inhibit-startup-screen t)
  '(line-numbers-p t)
  '(ns-function-modifier (quote meta))
- '(org-agenda-export-html-style nil t)
+ '(org-agenda-export-html-style nil)
  '(org-export-html-style-include-default nil t)
  '(org-highlight-latex-and-related (quote (latex script entities)))
  '(org-html-head-include-default-style nil)
- '(org-html-head-include-scripts nil)
+ '(org-html-head-include-scripts t)
  '(org-startup-folded (quote showeverything))
  '(package-archives
    (quote
@@ -457,9 +454,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "#042028" :foreground "#708183" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 150 :width normal :foundry "nil" :family "Menlo for Powerline"))))
- '(aquamacs-variable-width ((t (:stipple nil :strike-through nil :underline nil :slant normal :weight normal :height 150 :width normal :family "Menlo for Powerline"))) t)
- '(echo-area ((t (:stipple nil :strike-through nil :underline nil :slant normal :weight normal :width normal :family "Menlo for Powerline"))) t)
+ '(default ((t (:inherit nil :stipple nil :background "#042028" :foreground "#708183" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 150 :width normal :foundry "nil" :family "Menlo"))))
+ '(aquamacs-variable-width ((t (:stipple nil :strike-through nil :underline nil :slant normal :weight normal :height 150 :width normal :family "Menlo"))) t)
+ '(echo-area ((t (:stipple nil :strike-through nil :underline nil :slant normal :weight normal :width normal :family "Menlo"))) t)
  '(error ((t (:underline (:color "#dc322f" :style wave)))))
  '(escape-glyph ((t (:foreground "#268bd2"))))
  '(flycheck-fringe-error ((t (:foreground "#dc322f"))))
@@ -504,7 +501,7 @@
  '(helm-source-header ((t (:background "#52676f" :foreground "#fcf4dc" :weight bold))))
  '(highlight ((t (:background "#eee8d5"))))
  '(isearch ((t (:background "#CCCCFF" :foreground "#dc322f" :inverse-video t :underline nil :slant normal :weight normal))))
- '(latex-mode-default ((t (:inherit autoface-default :stipple nil :strike-through nil :underline nil :slant normal :weight normal :height 150 :width normal :family "Menlo for Powerline"))) t)
+ '(latex-mode-default ((t (:inherit autoface-default :stipple nil :strike-through nil :underline nil :slant normal :weight normal :height 150 :width normal :family "Menlo"))) t)
  '(lazy-highlight ((t (:background "#FFCCFF"))))
  '(line-number ((t (:inherit default))))
  '(line-number-current-line ((t (:foreground "gray50"))))
