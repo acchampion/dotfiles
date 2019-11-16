@@ -39,7 +39,7 @@ brew install gmp nettle libtasn1 libffi p11-kit libunistring gnutls
 ######################################################################
 # End: GNU TLS and dependencies
 ######################################################################
-brew install mpfr readline gawk gzip python@2
+brew install mpfr readline gawk gzip
 ######################################################################
 # Begin: GNU Parallel and dependencies
 ######################################################################
@@ -125,11 +125,6 @@ brew install tmux
 ######################################################################
 # wget, curl with support for i18n URLs
 ######################################################################
-brew install c-ares cunit libssh2
-brew install rtmpdump # Needed to stream RTMP (curl)
-brew install spdylay # Needed for HTTP/2 (curl)
-brew install jansson # Needed for HTTP/2 (curl)
-brew install jemalloc libev libidn libmetalink libidn2
 brew install wget curl lynx
 ######################################################################
 # Networking, security, and misc. tools (including Android, iOS dev.)
@@ -201,14 +196,10 @@ brew install epstool gl2ps intltool pixman psutils
 brew install groff openjpeg
 brew install webp gd ilmbase openexr lame mp3gain x264 chromaprint \
      libsoxr libogg libvorbis flac libsndfile libvpx
-brew install opencore-amr nasm openh264 opus sdl2 speex libebur128 \
-     orc schroedinger theora wavpack x265 zimg berkeley-db
-brew install libsamplerate --with-libsndfile
-brew install jack two-lame pango libde265 libheif
+brew install opencore-amr opus sdl2 speex orc schroedinger theora \
+     x265 zimg berkeley-db libsamplerate pango libde265 libheif
 brew install leptonica tesseract
-brew install libdv libshout taglib texi2html xvid xmlto dbus \
-     dbus-glib libidl orbit gconf hicolor-icon-theme \
-     gsettings-desktop-schemas
+brew install dbus hicolor-icon-theme gsettings-desktop-schemas
 ######################################################################
 # Install QT5 support
 ######################################################################
@@ -218,13 +209,11 @@ brew install qt
 ######################################################################
 brew install at-spi2-core at-spi2-atk libepoxy gdk-pixbuf gtk+3 gtk+ \
      rust libcroco gnome-themes-standard gobject-introspection
-brew install librsvg --with-gtk+3
-brew install graphviz --with-gts --with-librsvg --with-pango
-brew install libsvg-cairo perl vala libsoup itstool \
-     icon-naming-utils adwaita-icon-theme pygobject py2cairo pygtk \
-     gtk-mac-integration glade libglade gtkmm libglademm
+brew install librsvg graphviz
+brew install perl vala itstool adwaita-icon-theme pygobject py2cairo \
+     pygtk gtk-mac-integration glade libglade gtkmm libglademm
 brew install imagemagick imagemagick@6 graphicsmagick
-brew install svg2pdf speexdsp
+brew install svg2pdf speexdsp libsoxr
 brew install pulseaudio
 brew install gstreamer gst-plugins-base gst-plugins-good
 brew install libssh lua luajit geoipupdate geoip go hub libsmi \
@@ -232,8 +221,6 @@ brew install libssh lua luajit geoipupdate geoip go hub libsmi \
 ######################################################################
 # Install poppler and inkscape
 ######################################################################
-brew install libatomic_ops bdw-gc poppler potrace gtkmm3 gdl \
-     libiconv gtkextra
 brew tap caskformula/caskformula
 brew cask install inkscape
 ######################################################################
@@ -241,12 +228,10 @@ brew cask install inkscape
 ######################################################################
 brew install openmotif ddd
 ######################################################################
-# Math support for Octave
+# Math support for gnuplot, Octave
 ######################################################################
 brew install texinfo glpk qhull plotutils pstoedit imake transfig \
-     libcerf sundials
-brew install gnuplot --with-aquaterm
-brew install octave
+     libcerf sundials gnuplot octave
 ######################################################################
 # Python stuff
 ######################################################################
@@ -272,7 +257,7 @@ brew install muparserx pothos wxwidgets
 # Build OpenCV on macOS
 ######################################################################
 # brew cask install nvidia-cuda
-brew install opencv opencv@2
+brew install glog opencv
 ######################################################################
 # OSXFUSE with SSHFS
 ######################################################################
@@ -303,15 +288,12 @@ brew install postgis
 brew tap caskroom/fonts
 brew cask install font-archivo-narrow font-arimo font-charis-sil \
     font-clear-sans font-cooper-hewitt font-cousine font-dejavu-sans \
-    font-fira-mono font-fira-sans font-freesans \
-    font-gentium-book-basic font-go font-go-mono font-hack \
-    font-ibm-plex font-lato font-libertinus font-menlo-for-powerline \
-    font-montserrat font-noto-sans font-noto-sans-mono \
-    font-noto-serif font-open-sans font-oswald font-playfair-display \
-    font-powerline-symbols font-roboto font-roboto-mono font-signika \
-    font-sorts-mill-goudy font-source-code-pro font-source-sans-pro \
-    font-source-serif-pro font-spectral font-stix font-tinos \
-    font-ubuntu font-urw-base35 font-zilla-slab
+    font-fira-mono font-fira-sans font-gentium-book-basic font-go \
+    font-go-mono font-hack font-ibm-plex font-lato font-libertinus \
+    font-montserrat font-noto-sans font-noto-serif font-open-sans \
+    font-oswald font-playfair-display font-roboto font-roboto-mono \
+    font-signika font-source-code-pro font-source-sans-pro \
+    font-source-serif-pro font-ubuntu font-urw-base35
 ######################################################################
 # More Homebrew Cask Apps.
 ######################################################################
@@ -320,14 +302,13 @@ brew cask install font-archivo-narrow font-arimo font-charis-sil \
 # license). Some apps are proprietary, so ensure you read the software
 # licenses (and agree to them) before using these apps!
 ######################################################################
-brew cask install android-file-transfer android-ndk \
-     android-platform-tools android-sdk android-studio arduino \
-     box-sync calibre clamxav cyberduck dropbox fiji virtualbox
+brew cask install android-ndk android-platform-tools android-sdk \
+     android-studio arduino box-sync clamxav cyberduck dropbox fiji \
+     virtualbox
 brew cask install genymotion
 brew cask install gfxcardstatus gimp google-earth-pro graphsketcher \
      ibackupbot jd-gui libreoffice marble megasync mendeley \
      mp3gain-express mysqlworkbench omnidisksweeper omnifocus \
-     omnigraffle pacifist path-finder pgadmin4 processing qcad
+     omnigraffle pacifist path-finder pgadmin4 qcad
 brew cask install skim skype soapui sourcetree teamviewer texmaker \
-     tabula thunderbird tor-browser transmission visual-studio-code \
-     vlc weka
+     tabula tor-browser transmission visual-studio-code vlc weka
