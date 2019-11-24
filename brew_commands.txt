@@ -289,11 +289,12 @@ brew tap caskroom/fonts
 brew cask install font-archivo-narrow font-arimo font-charis-sil \
     font-clear-sans font-cooper-hewitt font-cousine font-dejavu-sans \
     font-fira-mono font-fira-sans font-gentium-book-basic font-go \
-    font-go-mono font-hack font-ibm-plex font-lato font-libertinus \
-    font-montserrat font-noto-sans font-noto-serif font-open-sans \
-    font-oswald font-playfair-display font-roboto font-roboto-mono \
-    font-signika font-source-code-pro font-source-sans-pro \
-    font-source-serif-pro font-ubuntu font-urw-base35
+    font-go-mono font-hack font-ibm-plex font-lato font-liberation \
+    font-libertinus font-montserrat font-noto-sans font-noto-serif \
+    font-open-sans font-oswald font-playfair-display font-roboto \
+    font-roboto-mono font-signika font-source-code-pro \
+    font-source-sans-pro font-source-serif-pro font-ubuntu \
+    font-urw-base35
 ######################################################################
 # More Homebrew Cask Apps.
 ######################################################################

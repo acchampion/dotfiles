@@ -57,21 +57,18 @@ BREW_PREFIX="/usr/local"
 BREW_EXEC="$BREW_PREFIX/bin/brew"
 BREW_GNU_COREUTILS_ROOT="/usr/local/opt/coreutils"
 BREW_GNU_COREUTILS_PATH="$BREW_GNU_COREUTILS_ROOT/libexec/gnubin"
-BREW_GNU_FINDUTILS_ROOT="/usr/local/opt/findutils"
-BREW_GNU_FINDUTILS_PATH="$BREW_GNU_FINDUTILS_PATH/libexec/gnubin"
 BREW_GNU_SED_ROOT="/usr/local/opt/gnu-sed"
 BREW_GNU_SED_PATH="$BREW_GNU_SED_ROOT/libexec/gnubin"
 BREW_GNU_COREUTILS_MANPATH="$BREW_GNU_COREUTILS_ROOT/libexec/gnuman"
-BREW_GNU_FINDUTILS_MANPATH="$BREW_GNU_FINDUTILS_ROOT/libexec/gnuman"
 BREW_GNU_SED_MANPATH="$BREW_GNU_SED_ROOT/libexec/gnuman"
 TEX_PATH=/usr/texbin:/Library/TeX/texbin
 GO_PATH=/usr/local/opt/go/libexec/bin
 FLUTTER_PATH=~/flutter/bin
 
-export MANPATH=$BREW_GNU_COREUTILS_MANPATH:$BREW_GNU_FINDUTILS_MANPATH:$BREW_GNU_SED_MANPATH:$MANPATH
+export MANPATH=$BREW_GNU_COREUTILS_MANPATH:$BREW_GNU_SED_MANPATH:$MANPATH
 export PYTHONPATH="/usr/local/lib/python3.7/site-packages:$PYTHONPATH"
 export KDEDIRS=$KDEDIRS:$HOME/Library/Preferences/KDE:/usr/local/kde4
-export PATH="/usr/local/kde4/bin:$HOME/bin:$HOME/.local/bin:/opt/X11/bin:/usr/local/sbin:/usr/local/bin:$BREW_GNU_COREUTILS_PATH:$BREW_GNU_FINDUTILS_PATH:$BREW_GNU_SED_PATH:$TEX_PATH:$ANDROID_SDK_ROOT:$ANDROID_NDK_HOME:/usr/local/mysql/bin:$GO_PATH:$FLUTTER_PATH:$PATH"
+export PATH="/usr/local/kde4/bin:$HOME/bin:$HOME/.local/bin:/opt/X11/bin:/usr/local/sbin:/usr/local/bin:$BREW_GNU_COREUTILS_PATH:$BREW_GNU_SED_PATH:$TEX_PATH:$ANDROID_SDK_ROOT:$ANDROID_NDK_HOME:/usr/local/mysql/bin:$GO_PATH:$FLUTTER_PATH:$PATH"
 export JAVA_HOME=`/usr/libexec/java_home`
 launchctl setenv DYLD_LIBRARY_PATH /usr/local/kde4/lib:$DYLD_LIBRARY_PATH
 export XDG_DATA_HOME=$HOME/Library/Preferences/KDE/share
