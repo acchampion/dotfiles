@@ -1,7 +1,7 @@
 ;; Adam's .emacs file
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-to-list 'default-frame-alist '(ns-appearance . dark))
-(setq x-select-enable-clipboard t)
+(setq select-enable-clipboard t)
 (setq mac-command-modifier 'meta)
 (setq mac-option-modifier 'meta)
 (setq ns-function-modifier 'meta)
@@ -99,7 +99,7 @@
 (require 'lpr)
 (require 'ps-print)
 (require 'enscript)
-;; Add Arimo and Cousine to supported printing fonts.
+;; Add Cousine to supported printing fonts.
 ;;(load ~"/.emacs.d/enscript.el")
 (setq ps-font-info-database
     (append
@@ -112,18 +112,6 @@
             (line-height . 12.8125)
             (space-width . 6.00098)
             (avg-char-width . 6.00098)))
-        ps-font-info-database))
-(setq ps-font-info-database
-    (append
-        '((Arimo
-            (fonts  (normal      . "Arimo")
-                    (bold        . "Arimo-Bold")
-                    (italic      . "Arimo-Italic")
-                    (bold-italic . "Arimo-BoldItalic"))
-            (size . 10.0)
-            (line-height . 12.832)
-            (space-width . 2.77832)
-            (avg-char-width . 5.09343)))
         ps-font-info-database))
 (setq ps-font-family 'Cousine)
 (setq ps-font-size 10)
@@ -202,7 +190,7 @@
 ;; GDB
  ;; use gdb-many-windows by default
  ;; Display source file containing the main routine at startup
-(setq  gdb-many-windows t)
+(setq gdb-many-windows t)
 (setq gdb-show-main t)
 
 
@@ -408,11 +396,11 @@
  '(inhibit-startup-screen t)
  '(line-numbers-p t)
  '(ns-function-modifier (quote meta))
- '(org-agenda-export-html-style nil)
+ '(org-agenda-export-html-style nil t)
  '(org-export-html-style-include-default nil t)
  '(org-highlight-latex-and-related (quote (latex script entities)))
- '(org-html-head-include-default-style nil)
- '(org-html-head-include-scripts t)
+ '(org-html-head-include-default-style nil t)
+ '(org-html-head-include-scripts t t)
  '(org-startup-folded (quote showeverything))
  '(package-archives
    (quote
@@ -423,7 +411,7 @@
  '(package-enable-at-startup t)
  '(package-selected-packages
    (quote
-    (flymake-css flymake-json powerline dart-mode company-irony company-irony-c-headers flycheck-irony use-package smartparens yasnippet function-args sr-speedbar x86-lookup helm-projectile projectile company-shell company-web csv-mode exec-path-from-shell auctex web-beautify company-math flyspell-correct-helm counsel ivy helm-gtags theme-changer writegood-mode wc-mode swift-mode solarized-theme org minimap langtool helm flymake-shell flymake-python-pyflakes ess elpy ecb color-theme-solarized color-theme)))
+    (flymake-css flymake-json powerline dart-mode company-irony company-irony-c-headers flycheck-irony use-package smartparens function-args sr-speedbar x86-lookup helm-projectile company-shell company-web csv-mode auctex web-beautify company-math flyspell-correct-helm counsel helm-gtags theme-changer writegood-mode wc-mode swift-mode solarized-theme minimap langtool helm flymake-shell flymake-python-pyflakes ess elpy ecb color-theme-solarized color-theme)))
  '(powerline-gui-use-vcs-glyph t)
  '(preview-file "emacs-enscript.ps")
  '(ps-always-build-face-reference t)

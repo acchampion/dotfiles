@@ -225,6 +225,7 @@ brew install sip cython numpy scipy
 ######################################################################
 brew install ghc cabal-install pandoc
 brew install languagetool ctags global
+brew install enscript aspell
 brew cask install emacs
 ######################################################################
 # Communications software
