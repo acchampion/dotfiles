@@ -1,5 +1,5 @@
 ######################################################################
-# Bash aliases
+# Aliases
 ######################################################################
 # Inspiration: https://github.com/mathiasbynens/dotfiles
 ######################################################################
@@ -7,5 +7,9 @@
 alias cp='nocorrect cp'
 alias rm='rm -rf'
 alias stdlinux='ssh -X -o "UserKnownHostsFile /dev/null" champion.17@stdlinux.cse.ohio-state.edu'
-alias champcse='ssh -Y champion@champion.cse.ohio-state.edu'
 alias ll='ls -al --color=auto'
+
+#####################################################################
+# Remove alias 'gs' for 'git stash' (part of zprezto's git module).
+#####################################################################
+unalias gs

@@ -1,4 +1,5 @@
 DefaultFancyHeader: emacs-champion
-AFMPath: /Users/adamcchampion/.fonts:/usr/local/Cellar/enscript/1.6.6/share/enscript/afm
+AFMPath: /Users/adamcchampion/.fonts:/usr/local/Cellar/enscript/1.6.6_1/share/enscript/afm
 DefaultMedia: Letter
 PageLabelFormat: long
+StatesConfigFile: /Users/adamcchampion/.enscript/hl/enscript.st

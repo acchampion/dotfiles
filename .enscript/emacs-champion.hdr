@@ -22,16 +22,16 @@
 %
 
 % -- code follows this line --
-%%DocumentNeededResources: font Arimo Cousine
+%%DocumentNeededResources: font Go-Regular Cousine GoMono
 %Format: eurdatestr	%D{%d %B %Y  %R}
 %Format: pagenumstr	Page $V$% of $=
 %Format: filedir        %d
 
 % Fonts.
-/Arimo /HeaderFont-Bold MF
+/Go-Regular /HeaderFont-Bold MF
 /HeaderF /HeaderFont-Bold findfont 12 scalefont def
 
-/Arimo /HeaderFont-Large MF
+/Go-Regular /HeaderFont-Large MF
 /HeaderLF /HeaderFont-Large findfont 12 1.3 mul scalefont def
 
 /do_header {	% print emacs header
