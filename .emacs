@@ -135,7 +135,7 @@
 
 ;; Langtool: fix spelling errors for text mode
 (require 'langtool)
-(setq langtool-java-tool-jar "/usr/local/Cellar/languagetool/4.7/libexec/languagetool.jar")
+(setq langtool-java-tool-jar "/usr/local/Cellar/languagetool/4.8/libexec/languagetool.jar")
 (setq langtool-bin "/usr/local/bin/languagetool")
 (setq langtool-default-language "en-US")
 (setq langtool-mother-tongue "en")
@@ -242,7 +242,7 @@
 (setq company-backends (delete 'company-semantic company-backends))
 (define-key c-mode-map  [(tab)] 'company-complete)
 (define-key c++-mode-map  [(tab)] 'company-complete)
- 
+
  ;; Helm with Projectile
 (require 'projectile)
 (projectile-global-mode)
@@ -425,6 +425,7 @@
      (shadow-color . 0.0))))
  '(ps-spool-duplex t)
  '(ps-spool-tumble t)
+ '(python-flymake-command (quote ("(\"flake8\" \"-)")))
  '(python-shell-interpreter "python3")
  '(show-paren-mode t)
  '(size-indication-mode t)
