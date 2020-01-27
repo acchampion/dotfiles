@@ -11,5 +11,7 @@ alias ll='ls -al --color=auto'
 
 #####################################################################
 # Remove alias 'gs' for 'git stash' (part of zprezto's git module).
+# Same for 'gls' for GNU ls.
 #####################################################################
 unalias gs
+unalias gls

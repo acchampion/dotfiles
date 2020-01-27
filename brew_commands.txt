@@ -111,8 +111,8 @@ brew cask install java adoptopenjdk8 iterm2 xquartz google-chrome \
 # Boost and MPI support (for multicore architectures)
 ######################################################################
 brew install swig popt sphinx-doc
-brew install cmake doxygen boost-build open-mpi tbb boost-mpi \
-    boost-python libomp
+brew install cmake doxygen boost-build open-mpi hwloc tbb boost-mpi \
+    boost-python3 libomp
 ######################################################################
 # Install hdf5
 ######################################################################
@@ -144,10 +144,10 @@ brew install p7zip pigz zopfli zlib lzlib
 ######################################################################
 # Databases (MySQL, PostgreSQL)
 ######################################################################
-brew install protobuf@3.7 mysql
+brew install protobuf mysql
 brew tap homebrew/services
 brew services start mysql
-brew install postgresql unixodbc
+brew install krb5 postgresql unixodbc
 ######################################################################
 # Subversion
 ######################################################################
@@ -156,12 +156,12 @@ brew install apr openldap apr-util scons lz4 utf8proc subversion
 # GIS libraries (round 1)
 ######################################################################
 brew install json-c proj geos gpp freexl liblwgeom libxml2 \
-     libspatialite libkml protobuf protobuf-c
+     libspatialite libkml protobuf-c
 ######################################################################
 # Math support (for GNU Octave)
 ######################################################################
-brew install fftw openblas gsl arpack qrupdate metis suite-sparse \
-     eigen cloog num-utils cgal sfcgal
+brew install fftw openblas gsl eigen arpack qrupdate metis \
+    suite-sparse cloog num-utils cgal sfcgal
 ######################################################################
 # Install harry - LCS string matcher
 ######################################################################
@@ -202,7 +202,7 @@ brew install imagemagick graphicsmagick
 brew install libsvg-cairo svg2pdf speexdsp
 brew install pulseaudio libshout libpsl libsoup taglib
 brew install gstreamer gst-plugins-base gst-plugins-good
-brew install geoipupdate geoip go hub libsmi portaudio
+brew install geoip go hub libsmi portaudio
 ######################################################################
 # Install openmotif for ddd and xpdf
 ######################################################################
@@ -215,7 +215,7 @@ brew install texinfo glpk qhull plotutils pstoedit imake transfig \
 ######################################################################
 # Python stuff
 ######################################################################
-brew install sip cython numpy scipy
+brew install sip cython pybind11 numpy scipy
 ######################################################################
 # Font stuff
 ######################################################################
@@ -224,7 +224,7 @@ brew install sip cython numpy scipy
 # Pandoc and Emacs
 ######################################################################
 brew install ghc cabal-install pandoc
-brew install languagetool ctags global
+brew install languagetool ctags python@3.8 global
 brew install enscript aspell
 brew cask install emacs
 ######################################################################
@@ -242,8 +242,8 @@ brew install hamlib minicom minimodem librtlsdr
 # Build OpenCV on macOS
 ######################################################################
 # brew cask install nvidia-cuda
-brew install ceres-solver gflags glog opencv
-######################################################################
+brew install gflags glog ceres-solver gflags glog opencv
+#####################################################################
 # OSXFUSE with SSHFS
 ######################################################################
 brew cask install osxfuse
@@ -251,7 +251,7 @@ brew install sshfs
 ######################################################################
 # GIS software (part 2)
 ######################################################################
-brew install libpq cfitsio epsilon expat libdap netcdr nespr nss \
+brew install libpq cfitsio epsilon expat libdap netcdf nss nspr \
     poppler xerces-c zstd gdal postgis
 # brew install mapnik
 ######################################################################
@@ -272,14 +272,14 @@ brew install libpq cfitsio epsilon expat libdap netcdr nespr nss \
 ######################################################################
 brew tap homebrew/cask-fonts
 brew cask install font-archivo-narrow font-arimo font-charis-sil \
-    font-clear-sans font-computer-modern font-cooper-hewitt \
-    font-cousine font-dejavu-sans font-fira-mono font-fira-sans \
-    font-gentium-book-basic font-go font-go-mono font-hack \
-    font-ibm-plex font-lato font-liberation-sans font-libertinus \
-    font-latin-modern font-montserrat font-noto-sans font-noto-serif \
-    font-open-sans font-oswald font-playfair-display font-roboto \
-    font-roboto-mono font-source-code-pro font-source-sans-pro \
-    font-source-serif-pro font-stix font-ubuntu font-urw-base35
+    font-clear-sans font-cooper-hewitt font-cousine font-dejavu-sans \
+    font-fira-mono font-fira-sans font-gentium-book-basic font-go \
+    font-go-mono font-hack font-ibm-plex font-lato \
+    font-liberation-sans font-libertinus font-latin-modern \
+    font-montserrat font-noto-sans font-noto-serif font-open-sans \
+    font-oswald font-playfair-display font-roboto font-roboto-mono \
+    font-source-code-pro font-source-sans-pro font-source-serif-pro \
+    font-stix font-ubuntu font-urw-base35
 ######################################################################
 # More Homebrew Cask Apps.
 ######################################################################
@@ -293,9 +293,5 @@ brew cask install android-file-transfer android-ndk \
     box-sync cyberduck dropbox fiji virtualbox
 brew install scrcpy
 brew cask install genymotion
-brew cask install gfxcardstatus gimp graphsketcher ibackupbot \
-    intellij-idea-ce jd-gui libreoffice marble megasync \
-    mendeley-desktop mp3gain-express mysqlworkbench omnidisksweeper \
-    omnifocus omnigraffle path-finder pgadmin4 qcad
 brew cask install skim soapui teamviewer texmaker tabula tor-browser \
     transmission visual-studio-code
