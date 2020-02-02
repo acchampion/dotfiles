@@ -16,8 +16,8 @@
 
 (advice-add 'python-mode :before 'elpy-enable)
 
-;; (when (memq window-system '(mac ns x))
-;;  (exec-path-from-shell-initialize))
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
 
 ;; Set up "useful" coding environment.
 ;; Source: https://github.com/tuhdo/emacs-c-ide-demo
@@ -292,9 +292,8 @@
 ;; Smart Parens
 (require 'smartparens)
 (require 'smartparens-config)
-(add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
+;; (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
 (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
-
 (require 'flycheck)
 (global-flycheck-mode)
 (setq flycheck-chktexrc "~/.chktexrc")
@@ -320,9 +319,19 @@
     ((lambda nil
        (when preview-file
          (shell-command
-          (concat "open "
-                  (expand-file-name preview-file)
-                  "&")))))))
+           (concat "rm "
+             (replace-regexp-in-string ".ps" ".pdf" (eval preview-file))))
+         (shell-command
+           (concat "ps2pdf -sFONTPATH="
+             (concat
+               (file-name-as-directory
+                 (getenv "HOME"))
+             ".fonts "
+             (eval preview-file))))
+         (shell-command
+           (concat "open "
+             (replace-regexp-in-string ".ps" ".pdf" (eval preview-file))))
+       )))))
 (setq inhibit-startup-screen t)
 (setq line-numbers-p t)
 (setq org-agenda-export-html-style nil)
@@ -363,14 +372,6 @@
    (quote
     ("a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "0598c6a29e13e7112cfbc2f523e31927ab7dce56ebb2016b567e1eff6dc1fd4f" "d91ef4e714f05fff2070da7ca452980999f5361209e679ee988e3c432df24347" "c1afd422fab9cb7ad2422523d0491abc8f397fea76ec57bf27c70b50bfa04243" "8eafb06bf98f69bfb86f0bfcbe773b44b465d234d4b95ed7fa882c99d365ebfd" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" "1e7e097ec8cb1f8c3a912d7e1e0331caeed49fef6cff220be63bd2a6ba4cc365" default)))
  '(ede-project-directories (quote ("/Users/acc/Teaching/CSE2431/lab1")))
- '(enscript-after-hook
-   (quote
-    ((lambda nil
-       (when preview-file
-         (shell-command
-          (concat "open "
-                  (expand-file-name preview-file)
-                  "&")))))))
  '(ensime-sem-high-faces
    (quote
     ((var :foreground "#9876aa" :underline
