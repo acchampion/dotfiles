@@ -135,7 +135,7 @@
 
 ;; Langtool: fix spelling errors for text mode
 (require 'langtool)
-(setq langtool-java-tool-jar "/usr/local/Cellar/languagetool/4.8/libexec/languagetool.jar")
+(setq langtool-java-tool-jar "/usr/local/Cellar/languagetool/4.9/libexec/languagetool.jar")
 (setq langtool-bin "/usr/local/bin/languagetool")
 (setq langtool-default-language "en-US")
 (setq langtool-mother-tongue "en")
