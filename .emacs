@@ -53,7 +53,7 @@
 (getenv "PATH")))))
 (setenv "TEXMFMAIN"
 	(concat "/usr/local/texlive/texmf-local" ":"
-		(concat "/usr/local/texlive/2019/texmf-dist"
+		(concat "/usr/local/texlive/2020/texmf-dist"
   (getenv "TEXMFMAIN"))))
 
 ;; Use PDF mode by default
