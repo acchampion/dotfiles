@@ -41,6 +41,7 @@ zstyle ':prezto:load' pmodule \
   'editor' \
   'prompt'
 
+zstyle ':prezto:module:git:alias' skip 'yes'
 #
 # Autosuggestions
 #
