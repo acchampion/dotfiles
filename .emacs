@@ -2,13 +2,16 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-to-list 'default-frame-alist '(ns-appearance . dark))
 (setq select-enable-clipboard t)
-(setq mac-command-modifier 'meta)
-(setq mac-option-modifier 'meta)
-(setq ns-function-modifier 'meta)
+
+(when (memq window-system '(mac ns x))
+  (setq mac-command-modifier 'meta)
+  (setq mac-option-modifier 'meta)
+  (setq ns-function-modifier 'meta)
+  (add-to-list 'load-path "/usr/local/share/emacs/site-lisp"))
 (scroll-bar-mode -1)
 (add-to-list 'load-path "~/.emacs.d/lisp")
 (add-to-list 'load-path "~/.emacs.d/elpa")
-(add-to-list 'load-path "/usr/local/share/emacs/site-lisp")
+
 (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
 
 (require 'package) ;; You might already have this line
@@ -46,11 +49,12 @@
    "longlines.el"
    "Minor mode for automatically wrapping long lines." t)
 
-(setenv "PATH"
-  (concat "~/bin" ":"
-  (concat "/Library/TeX/texbin" ":"
-  (concat "/usr/local/bin" ":"
-(getenv "PATH")))))
+(when (memq window-system '(mac ns x))
+  (setenv "PATH"
+    (concat "~/bin" ":"
+      (concat "/Library/TeX/texbin" ":"
+        (concat "/usr/local/bin" ":"
+          (getenv "PATH"))))))
 (setenv "TEXMFMAIN"
 	(concat "/usr/local/texlive/texmf-local" ":"
 		(concat "/usr/local/texlive/2020/texmf-dist"
@@ -135,8 +139,9 @@
 
 ;; Langtool: fix spelling errors for text mode
 (require 'langtool)
-(setq langtool-java-tool-jar "/usr/local/Cellar/languagetool/4.9/libexec/languagetool.jar")
-(setq langtool-bin "/usr/local/bin/languagetool")
+(when (memq window-system '(mac ns x)
+  (setq langtool-java-tool-jar "/usr/local/opt/languagetool/libexec/languagetool.jar")
+  (setq langtool-bin "/usr/local/bin/languagetool")))
 (setq langtool-default-language "en-US")
 (setq langtool-mother-tongue "en")
 (setq sentence-end-double-space nil)
