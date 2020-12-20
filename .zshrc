@@ -30,6 +30,10 @@ ulimit -S -n 8192
 source ~/.aliases
 source ~/.exports
 
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
+
 # Activate zsh completions
 fpath=(/usr/local/share/zsh-completions $fpath)
 

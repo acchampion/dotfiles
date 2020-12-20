@@ -63,7 +63,7 @@ export FC=/usr/local/bin/gfortran
 ######################################################################
 # Other helpful binaries: OpenSSL, Python 3
 ######################################################################
-brew install sqlite gdbm makedepend xz python
+brew install sqlite gdbm makedepend xz python pyenv
 ######################################################################
 # Begin: GDB: Generate a certificate 'gdb-cert' to code-sign gdb if
 # you haven't already. Use macOS's Keychain Manager app to do so.
@@ -103,10 +103,10 @@ brew install ack icu4c boost source-highlight asciidoc zmq
 #   how-to-configure-unity-2017-4-to-target-android-and-avoid-build-
 #   failures-on-osx/49630166#49630166
 ######################################################################
+brew install java xquartz
 brew tap homebrew/cask
 brew tap adoptopenjdk/openjdk
-brew cask install java adoptopenjdk8 iterm2 xquartz google-chrome \
-     firefox
+brew cask install adoptopenjdk8 iterm2 google-chrome firefox
 ######################################################################
 # Boost and MPI support (for multicore architectures)
 ######################################################################
@@ -155,13 +155,13 @@ brew install apr openldap apr-util scons lz4 utf8proc subversion
 ######################################################################
 # GIS libraries (round 1)
 ######################################################################
-brew install json-c proj geos gpp freexl liblwgeom libxml2 \
-     libspatialite libkml protobuf-c
+brew install json-c proj geos gpp freexl libxml2 libspatialite \
+    libkml  protobuf-c
 ######################################################################
 # Math support (for GNU Octave)
 ######################################################################
 brew install fftw openblas gsl eigen arpack qrupdate metis \
-    suite-sparse cloog num-utils cgal sfcgal
+    suite-sparse cloog cgal sfcgal
 ######################################################################
 # Install harry - LCS string matcher
 ######################################################################
@@ -219,7 +219,7 @@ brew install sip cython pybind11 numpy scipy
 ######################################################################
 # Font stuff
 ######################################################################
-# brew install fondu ttf2pt1
+brew install ttf2pt1
 ######################################################################
 # Pandoc and Emacs
 ######################################################################
@@ -244,10 +244,14 @@ brew install hamlib minicom minimodem librtlsdr
 # brew cask install nvidia-cuda
 brew install gflags glog ceres-solver gflags glog opencv
 #####################################################################
-# OSXFUSE with SSHFS
+# MacFUSE with SSHFS
 ######################################################################
-brew cask install osxfuse
-brew install sshfs
+# Due to a change in licensing, MacFUSE (formerly OSXFUSE) is no
+# longer available in Homebrew. Install MacFUSE and sshfs from
+# https://osxfuse.github.io/ .
+######################################################################
+# brew cask install osxfuse
+# brew install sshfs
 ######################################################################
 # GIS software (part 2)
 ######################################################################
@@ -273,12 +277,12 @@ brew install libpq cfitsio epsilon expat libdap netcdf nss nspr \
 brew tap homebrew/cask-fonts
 brew cask install font-archivo-narrow font-arimo font-charis-sil \
     font-clear-sans font-cooper-hewitt font-cousine font-dejavu \
-    font-fira-mono font-fira-sans font-gentium-book-basic font-go \
-    font-hack font-ibm-plex font-lato font-liberation font-libertinus \
-    font-latin-modern font-montserrat font-noto-sans font-noto-serif \
-    font-open-sans font-oswald font-playfair-display font-roboto \
-    font-roboto-mono font-source-code-pro font-source-sans-pro \
-    font-source-serif-pro font-stix font-urw-base35
+    font-fira-mono font-fira-sans font-go font-hack font-ibm-plex \
+    font-lato font-liberation font-libertinus font-latin-modern \
+    font-noto-sans font-noto-serif font-open-sans font-oswald \
+    font-playfair-display font-roboto font-roboto-mono \
+    font-source-code-pro font-source-sans-pro font-source-serif-pro \
+    font-stix font-urw-base35
 ######################################################################
 # More Homebrew Cask Apps.
 ######################################################################
