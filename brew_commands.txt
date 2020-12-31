@@ -105,8 +105,7 @@ brew install ack icu4c boost source-highlight asciidoc zmq
 ######################################################################
 brew install java xquartz
 brew tap homebrew/cask
-brew tap adoptopenjdk/openjdk
-brew cask install adoptopenjdk8 iterm2 google-chrome firefox
+brew install adoptopenjdk8 iterm2 google-chrome firefox
 ######################################################################
 # Boost and MPI support (for multicore architectures)
 ######################################################################
@@ -130,7 +129,7 @@ brew install bison help2man flex dos2unix tofrodos libdnet libpcap
 brew install tcpdump
 brew install socat telnet apktool dex2jar smali gperf ccache \
      gperftools markdown
-brew cask install wireshark
+brew install wireshark
 brew install libplist usbmuxd libzip libimobiledevice \
      ideviceinstaller ios-deploy cocoapods
 ######################################################################
@@ -182,7 +181,7 @@ brew install little-cms little-cms2 ghostscript
 brew install epstool gl2ps intltool pixman psutils
 brew install groff openjpeg
 brew install webp gd ilmbase openexr lame mpg123 mp3gain x264 \
-    chromaprint 
+    chromaprint
 brew install orc schroedinger zimg berkeley-db pango libheif \
     libde265 shared-mime-info
 brew install dbus hicolor-icon-theme
@@ -226,7 +225,7 @@ brew install ttf2pt1
 brew install ghc cabal-install pandoc
 brew install languagetool ctags python@3.8 global
 brew install enscript aspell
-brew cask install emacs
+brew install emacs
 ######################################################################
 # Communications software
 ######################################################################
@@ -241,7 +240,7 @@ brew install hamlib minicom minimodem librtlsdr
 ######################################################################
 # Build OpenCV on macOS
 ######################################################################
-# brew cask install nvidia-cuda
+# brew install nvidia-cuda
 brew install gflags glog ceres-solver gflags glog opencv
 #####################################################################
 # MacFUSE with SSHFS
@@ -250,7 +249,7 @@ brew install gflags glog ceres-solver gflags glog opencv
 # longer available in Homebrew. Install MacFUSE and sshfs from
 # https://osxfuse.github.io/ .
 ######################################################################
-# brew cask install osxfuse
+# brew install osxfuse
 # brew install sshfs
 ######################################################################
 # GIS software (part 2)
@@ -275,7 +274,7 @@ brew install libpq cfitsio epsilon expat libdap netcdf nss nspr \
 # check the font license terms.
 ######################################################################
 brew tap homebrew/cask-fonts
-brew cask install font-archivo-narrow font-arimo font-charis-sil \
+brew install font-archivo-narrow font-arimo font-charis-sil \
     font-clear-sans font-cooper-hewitt font-cousine font-dejavu \
     font-fira-mono font-fira-sans font-go font-hack font-ibm-plex \
     font-lato font-liberation font-libertinus font-latin-modern \
@@ -291,10 +290,10 @@ brew cask install font-archivo-narrow font-arimo font-charis-sil \
 # license). Some apps are proprietary, so ensure you read the software
 # licenses---and agree to them---before using these apps!
 ######################################################################
-brew cask install android-file-transfer android-ndk \
+brew install android-file-transfer android-ndk \
     android-platform-tools android-sdk android-studio arduino \
     box-sync cyberduck dropbox fiji virtualbox
 brew install scrcpy
-brew cask install genymotion
-brew cask install skim soapui teamviewer texmaker tabula tor-browser \
+brew install genymotion
+brew install skim soapui teamviewer texmaker tabula tor-browser \
     transmission visual-studio-code
