@@ -225,6 +225,7 @@ brew install ttf2pt1
 brew install ghc cabal-install pandoc
 brew install languagetool ctags python@3.8 global
 brew install enscript aspell
+brew install node yarn
 brew install emacs
 ######################################################################
 # Communications software
