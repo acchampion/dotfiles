@@ -268,17 +268,18 @@ brew install libpq cfitsio epsilon expat libdap nss nspr poppler \
 # Homebrew Cask Fonts.
 ######################################################################
 # AFAIK, these fonts may be redistributed freely. You should always
-# check the font license terms.
+# double-check the font license terms (and follow them).
 ######################################################################
 brew tap homebrew/cask-fonts
 brew install --cask font-archivo-narrow font-arimo font-charis-sil \
     font-clear-sans font-cooper-hewitt font-cousine font-dejavu \
-    font-fira-code font-fira-mono font-fira-sans font-go \
-    font-ibm-plex font-jetbrains-mono font-lato font-liberation \
-    font-libertinus font-latin-modern font-noto-sans font-noto-serif \
-    font-office-code-pro font-open-sans font-roboto font-roboto-mono \
-    font-source-code-pro font-source-sans-pro font-source-serif-pro \
-    font-stix font-urw-base35
+    font-fira-code font-fira-sans font-go font-ibm-plex-serif \
+    font-ibm-plex-sans font-ibm-plex-sans-condensed font-ibm-plex-mono \
+    font-jetbrains-mono font-lato font-liberation font-literata \
+    font-merriweather font-merriweather-sans font-libertinus \
+    font-latin-modern font-noto-sans font-noto-serif font-office-code-pro \
+    font-open-sans font-roboto font-roboto-mono font-source-code-pro \
+    font-source-sans-pro font-source-serif-pro font-stix font-urw-base35
 ######################################################################
 # More Homebrew Cask Apps.
 ######################################################################
