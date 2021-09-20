@@ -32,7 +32,7 @@
       '(lsp-mode yasnippet lsp-treemacs helm-lsp projectile hydra flycheck
            company avy which-key helm-xref dap-mode zenburn-theme json-mode
            lsp-pyright auctex org langtool smartparens exec-path-from-shell
-	   elpy gnu-elpa-keyring-update ))
+	       gnu-elpa-keyring-update ))
 
 (when (cl-find-if-not #'package-installed-p package-selected-packages)
   (package-refresh-contents)
@@ -41,6 +41,7 @@
 (when (memq window-system '(mac ns x))
   (exec-path-from-shell-initialize))
 
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
 (load-theme 'zenburn)
 
@@ -129,7 +130,9 @@
 (require 'lpr)
 (require 'ps-print)
 (require 'enscript)
+
 ;; Add Cousine to supported printing fonts.
+;; Make sure it's in your ~/.fonts directory.
 ;;(load ~"/.emacs.d/enscript.el")
 (setq ps-font-info-database
     (append
@@ -159,6 +162,8 @@
 ;; Setup Org-mode HTML export.
 (setq org-export-with-smart-quotes t)
 (setq user-mail-address "champion@cse.ohio-state.edu")
+(setq org-html-doctype "html5")
+(setq org-html-html5-fancy t)
 
 ;; Turn off shell mode bold text from previous commands.
 (setq comint-highlight-input nil)
@@ -174,7 +179,7 @@
 
 ;; Programming
 (setq c-default-style "linux") ; set style to "linux"
-(setq c-basic-offset 4)
+(setq c-basic-offset 2)
 (setq ediff-diff-options "-w"
       ediff-split-window-function 'split-window-horizontally
       ediff-window-setup-function 'ediff-setup-windows-plain)
@@ -243,7 +248,7 @@
        helm-candidate-number-limit 20
        helm-ff-skip-boring-files t)
 (global-set-key (kbd "M-x") 'helm-M-x)
- ;; (setq helm-M-x-fuzzy-match t) ;; optional fuzzy matching for helm-M-x
+(setq helm-M-x-fuzzy-match nil) ;; optional fuzzy matching for helm-M-x
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 (global-set-key (kbd "C-x b") 'helm-mini)
  ;; (setq helm-buffers-fuzzy-matching t
@@ -289,6 +294,7 @@
                           (require 'lsp-pyright)
                           (lsp))))  ; or lsp-deferred
 
+
 ;; Company mode
 (require 'company)
 (require 'popup)
@@ -308,19 +314,53 @@
 (setq gc-cons-threshold (* 256 1024 1024)
       read-process-output-max (* 4 1024 1024)
       treemacs-space-between-root-nodes nil
-      company-idle-delay 0.0
+      company-idle-delay 0.025
+      lsp-prefer-capf t
       company-minimum-prefix-length 1
       create-lockfiles nil
-      lsp-idle-delay 0.500 ;; clangd is fast
+      lsp-idle-delay 1.000 ;; clangd is fast
       ;; be more ide-ish
       lsp-headerline-breadcrumb-enable t
       lsp-log-io nil)
 
+;; Speed up LSP mode.
+;; Source: http://blog.binchen.org/posts/how-to-speed-up-lsp-mode.html
 (with-eval-after-load 'lsp-mode
   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
   (require 'dap-cpptools)
   (require 'dap-chrome)
-  (yas-global-mode))
+  (yas-global-mode)
+  
+ ;; enable log only for debug
+  (setq lsp-log-io nil)
+
+  ;; no real time syntax check
+  (setq lsp-diagnostic-package :none)
+
+  ;; use `company-ctags' only.
+  ;; Please note `company-lsp' is automatically enabled if installed
+  (setq lsp-enable-completion-at-point nil)
+
+  ;; turn off for better performance
+  (setq lsp-enable-symbol-highlighting nil)
+
+  ;; use ffip instead
+  (setq lsp-enable-links nil)
+
+  ;; auto restart lsp
+  (setq lsp-restart 'auto-restart)
+
+  (setq lsp-client-packages '(lsp-clients))
+
+  ;; don't ping LSP lanaguage server too frequently
+  (defvar lsp-on-touch-time 0)
+  (defadvice lsp-on-change (around lsp-on-change-hack activate)
+    ;; don't run `lsp-on-change' too frequently
+    (when (> (- (float-time (current-time))
+                lsp-on-touch-time) 30) ;; 30 seconds
+      (setq lsp-on-touch-time (float-time (current-time)))
+      ad-do-it))
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Helm with Gtags
@@ -483,7 +523,7 @@
  '(custom-safe-themes
    '("e6df46d5085fde0ad56a46ef69ebb388193080cc9819e2d6024c9c6e27388ba9" default))
  '(package-selected-packages
-   '(lsp-pyright dap-mode company-lsp lsp-ui which-key helm-lsp helm-xref lsp-treemacs lsp-mode zenburn-theme use-package solarized-theme smartparens projectile langtool helm-gtags gnu-elpa-keyring-update flycheck exec-path-from-shell elpy auctex))
+   '(find-file-in-project company-ctags lsp-pyright dap-mode company-lsp lsp-ui which-key helm-lsp helm-xref lsp-treemacs lsp-mode zenburn-theme use-package solarized-theme smartparens projectile langtool helm-gtags gnu-elpa-keyring-update flycheck exec-path-from-shell elpy auctex))
  '(show-paren-mode t)
  '(size-indication-mode t)
  '(tool-bar-mode nil))
