@@ -1,0 +1,39 @@
+######################################################################
+# (C) 2021, Adam C. Champion
+######################################################################
+# Code to generate font files for GNU Enscript that Emacs uses to
+# print code. (These look better than the standard Helvetica(R) and
+# Courier(R) fonts.)
+#
+# Specifically, the script clones the following fonts (licenses):
+#   - Arimo (OFL);
+#   - Cousine (OFL);
+#   - Go fonts
+#
+# By using this script, you consent to abide by the respective font
+# licenses.
+#
+# Prerequisites:
+#   - Install Xcode, Xcode tools and Homebrew (http://brew.sh) on
+#     macOS.
+#   - Install fonttools via Python.
+######################################################################
+
+# Install prerequisites
+brew install python3 subversion ttf2pt1
+pip3 install fonttools
+
+# Check out Arimo repository via SVN
+svn co https://github.com/google/fonts/trunk/apache/arimo/
+fonttools varLib.instancer -o Arimo-Regular.ttf ./arimo/Arimo\[wght\].ttf  wght=400
+fonttools varLib.instancer -o Arimo-Bold.ttf ./arimo/Arimo\[wght\].ttf  wght=700
+fonttools varLib.instancer -o Arimo-Italic.ttf ./arimo/Arimo-Italic\[wght\].ttf wght=400
+fonttools varLib.instancer -o Arimo-BoldItalic.ttf ./arimo/Arimo-Italic\[wght\].ttf wght=700
+
+# Check out Cousine repository via SVN
+svn co https://github.com/google/fonts/trunk/apache/cousine/
+cp cousine/Cousine-*.ttf .
+
+# Get Go fonts
+curl https://go.googlesource.com/image/+archive/master/font/gofont/ttfs.tar.gz --output gofonts.tar.gz
+tar xvzf gofonts.tar.gz

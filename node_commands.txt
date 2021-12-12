@@ -1,3 +1,4 @@
+npm install -g npm-check-updates
 npm install -g vscode-json-languageserver
 npm install -g bash-language-server
 npm install -g pyright
