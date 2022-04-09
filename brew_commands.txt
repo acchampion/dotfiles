@@ -23,15 +23,16 @@
 ######################################################################
 # Install GNU tools for macOS (more up-to-date) with dependencies
 ######################################################################
-brew install coreutils binutils diffutils lzip ed findutils gettext \
-  gnu-getopt gnu-indent gnu-sed gnu-tar gnu-which pcre pkg-config \
-  grep m4 libtool readline
+brew install gmp coreutils binutils diffutils lzip ed findutils \
+  gettext gnu-getopt gnu-indent gnu-sed gnu-tar gnu-which pcre \
+  pkg-config grep m4 libtool readline
 ######################################################################
 # Begin: GNU TLS and dependencies
 ######################################################################
-brew install c-ares jemalloc libev nghttp2
-brew install gmp nettle libtasn1 libffi p11-kit libunistring \
-  libevent m4 unbound libev bdw-gc libidn2 guile gnutls
+# brew install c-ares jemalloc libev nghttp2
+brew install ca-certificates guile nettle libtasn1 libffi p11-kit \
+  libunistring openssl@1.1 libevent unbound libev bdw-gc libidn2 \
+  guile gnutls
 ######################################################################
 # End: GNU TLS and dependencies
 ######################################################################
@@ -39,28 +40,33 @@ brew install mpfr gawk gzip
 ######################################################################
 # Begin: GNU Parallel and dependencies
 ######################################################################
-brew install docbook docbook-xsl parallel
+brew install parallel
 ######################################################################
 # End: GNU Parallel and dependencies
 ######################################################################
-brew install autoconf autoconf-archive automake screen git ncurses \
-  watch pcre2 wdiff
+brew install autoconf autoconf-archive automake screen pcre2 git \
+  ncurses watch pcre2 wdiff
 ######################################################################
 # Install Bash 4 with completion
 ######################################################################
-brew install bash bash-completion2
+brew install bash bash-completion@2
 ######################################################################
 # Install zsh with completions, zprezto, and powerlevel10k
 ######################################################################
-brew install zsh zsh-completion
+brew install zsh zsh-completions
 git clone --recursive https://github.com/sorin-ionescu/prezto.git \
     "${ZDOTDIR:-$HOME}/.zprezto"
+setopt EXTENDED_GLOB
+for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
+  ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
+done
+chsh -s /usr/local/bin/zsh
 brew install romkatv/powerlevel10k/powerlevel10k
 echo 'source /usr/local/opt/powerlevel10k/powerlevel10k.zsh-theme' >>! ~/.zshrc
 ######################################################################
 # Install gcc and veclibfort
 ######################################################################
-brew install libmpc isl gcc veclibfort
+brew install libmpc isl veclibfort zstd gcc
 export FC=/usr/local/bin/gfortran
 ######################################################################
 # Other helpful binaries: OpenSSL, Python 3
@@ -88,7 +94,8 @@ brew install libgpg-error libgcrypt libksba libassuan pinentry pth \
 # End: Install GPG and dependencies
 ######################################################################
 brew install rename tree unzip libyaml ruby lua berkeley-db perl vim
-brew install ack icu4c boost source-highlight asciidoc zmq
+brew install ack icu4c boost source-highlight docbook libsodium \
+  asciidoc zeromq
 ######################################################################
 # Install Brew Cask and apps: Java, XQuartz, iTerm2, Chrome, Firefox.
 # Users are responsible for compliance with software license
@@ -116,8 +123,8 @@ brew install szip hdf5
 ######################################################################
 # Install tmux, wget, curl
 ######################################################################
-brew install utf8proc tmux wget lynx brotli libmetalink libssh2 \
-  openldap rtmpdump curl
+brew install utf8proc tmux wget lynx brotli libssh2 openldap \ 
+  rtmpdump curl
 ######################################################################
 # Networking, security, and misc. tools (including Android, iOS dev.)
 ######################################################################
@@ -126,7 +133,7 @@ sudo airodump-ng-oui-update
 brew install bison help2man flex dos2unix tofrodos libdnet libpcap
 brew install tcpdump
 brew install socat telnet libpng freetype openjdk@8 apktool dex2jar \
-  smali gperf ccache gperftools markdown
+  smali gperf gperftools markdown
 brew install --cask wireshark
 brew install libplist usbmuxd libzip libimobiledevice \
   ideviceinstaller ios-deploy cocoapods
@@ -175,17 +182,19 @@ brew install ivy ant gradle maven scala leiningen kotlin
 brew install jhead libgeotiff jasper netpbm glib gts fltk giflib \
   pngcheck libsvg ninja poco fontconfig glib-networking meson \
   gsettings-desktop-schemas
-brew install little-cms little-cms2 ghostscript
-brew install epstool gl2ps intltool pixman psutils
-brew install uchardet groff openjpeg
+brew install little-cms little-cms2 jbig2dec libidn openjpeg \
+  ghostscript
+brew install epstool gl2ps intltool pixman psutils uchardet groff
 brew install webp gd imath openexr lame mpg123 mp3gain x264 chromaprint
-brew install orc schroedinger pango xmlto shared-mime-info libde265 \
-  libheif shared-mime-info
+brew install orc schroedinger pango docbook-xsl xmlto shared-mime-info \
+  libde265 libheif shared-mime-info
 brew install dbus hicolor-icon-theme
+brew services start dbus
 ######################################################################
-# Install QT5 support
+# Install QT 6 support
 ######################################################################
-brew install assimp double-conversion libb2 libproxy qt
+brew install assimp double-conversion hunspell libb2 libproxy md4c \
+  qt@5 qt
 ######################################################################
 # Install GTK+3 support
 ######################################################################
@@ -208,7 +217,7 @@ brew install libice libsm libxmu libxp libxt xbitmaps openmotif \
 # Math support for gnuplot, Octave
 ######################################################################
 brew install texinfo glpk qhull plotutils pstoedit imake transfig \
-  libcerf sundials qt@5 gnuplot pyqt@5 sip qscintilla2 octave
+  libcerf sundials gnuplot pyqt@5 sip qscintilla2 octave
 ######################################################################
 # Python stuff
 ######################################################################
@@ -224,7 +233,7 @@ brew install ttf2pt1
 brew install ghc cabal-install pandoc
 brew install openjdk@11 languagetool ctags jansson libgccjit \
   enscript aspell
-brew install libuv node yarn
+brew install libuv c-ares node yarn
 brew install --cask emacs
 ######################################################################
 # Communications software
@@ -256,7 +265,7 @@ brew install gflags glog ceres-solver gflags glog glew jsoncpp \
 # GIS software (part 2)
 ######################################################################
 brew install libpq cfitsio epsilon expat libdap nss nspr poppler \
-  xerces-c gdal postgis
+  poppler-qt5 xerces-c gdal postgis
 # brew install mapnik
 ######################################################################
 # Perlbrew
@@ -275,14 +284,15 @@ brew install libpq cfitsio epsilon expat libdap nss nspr poppler \
 # double-check the font license terms (and follow them).
 ######################################################################
 brew tap homebrew/cask-fonts
-brew install --cask font-archivo-narrow font-clear-sans \
+brew install --cask font-clear-sans font-cascadia-mono \
   font-cooper-hewitt font-dejavu font-fira-code font-fira-sans \
   font-go font-ibm-plex-serif font-ibm-plex-sans \
   font-ibm-plex-sans-condensed font-ibm-plex-mono font-jetbrains-mono \
-  font-lato font-liberation font-libertinus font-latin-modern \
-  font-noto-sans font-noto-serif font-office-code-pro font-open-sans \
-  font-roboto font-roboto-mono font-source-code-pro \
-  font-source-sans-pro font-source-serif-pro font-stix font-urw-base35
+  font-liberation font-libertinus font-latin-modern \
+  font-noto-color-emoji font-noto-mono font-noto-sans \
+  font-noto-serif font-office-code-pro font-open-sans font-roboto \
+  font-source-code-pro font-source-sans-pro font-source-serif-pro \
+  font-stix font-urw-base35
 ######################################################################
 # More Homebrew Cask Apps.
 ######################################################################
@@ -293,8 +303,13 @@ brew install --cask font-archivo-narrow font-clear-sans \
 brew install --cask android-file-transfer android-ndk \
   android-platform-tools android-studio arduino box-sync cyberduck \
   dropbox fiji virtualbox
-brew install scrcpy gedit
+brew install scrcpy
+brew install pango enchant iso-codes gspell gtksourceview4 py3cairo \
+  pygobject3 libpeas amtk tepl gedit
 brew install --cask genymotion
 brew install --cask intellij-idea-ce pycharm-ce
-brew install --cask mactex skim teamviewer texmaker tabula \
-  tor-browser transmission visual-studio-code zoom
+brew install --cask mactex skim texmaker tabula tor-browser \
+  transmission visual-studio-code zoomus
+brew install --cask betterzip box-sync cloudmounter daisydisk \
+  flutter foobar2000 geany graphsketcher libreoffice musicbrainz-picard \
+  omnigraffle pagico path-finder qobuz spotify textsniper unclutter xld

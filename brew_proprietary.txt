@@ -1,0 +1,3 @@
+brew install --cask betterzip box-sync cloudmounter daisydisk dropbox \
+  flutter foobar2000 geany musicbrainz-picard omnifocus omnigraffle \
+  pagico path-finder qobuz spotify textsniper unclutter xld
