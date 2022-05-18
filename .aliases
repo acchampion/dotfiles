@@ -4,16 +4,8 @@
 # Inspiration: https://github.com/mathiasbynens/dotfiles
 # Source: https://github.com/pyenv/pyenv/issues/106
 ######################################################################
-
-alias brew="env PATH=${PATH//$(pyenv root)\/shims:/} brew"
+alias brew='env PATH="${PATH//$(pyenv root)\/shims:/}" brew'
 alias cp='nocorrect cp'
 alias rm='rm -rf'
 alias stdlinux='ssh -X -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null champion.17@stdlinux.cse.ohio-state.edu'
 alias ll='ls -al --color=auto'
-
-#####################################################################
-# Remove alias 'gs' for 'git stash' (part of zprezto's git module).
-# Same for 'gls' for GNU ls.
-#####################################################################
-# unalias gs
-# unalias gls

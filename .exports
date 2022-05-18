@@ -19,10 +19,6 @@ export LESS_TERMCAP_md="${blue}";
 # Don’t clear the screen after quitting a manual page.
 export MANPAGER='less -X';
 
-# Avoid issues with `gpg` as installed via Homebrew.
-# https://stackoverflow.com/a/42265848/96656
-export GPG_TTY=$(tty);
-
 # Set up Gtags for Emacs
 export GTAGSLIBPATH=$HOME/.gtags/
 
@@ -32,7 +28,7 @@ export LDFLAGS="-L/usr/local/lib -L/usr/local/opt/readline/lib -L/usr/local/opt/
 export LD_LIBRARY_PATH="/usr/local/lib:/usr/local/opt/openldap/lib:/usr/local/opt/openblas/lib:/usr/local/opt/libffi/lib:/usr/local/opt/icu4c/lib:/usr/local/opt/libarchive/lib:/usr/local/opt/qt5/lib:/usr/local/opt/curl/lib:/usr/local/opt/texinfo/lib:/usr/local/opt/boost/lib:$LD_LIBRARY_PATH"
 export DYLD_LIBRARY_PATH="/usr/local/opt/icu4c/lib:/usr/local/opt/libffi/lib:/usr/local/opt/libarchive/lib:/usr/local/opt/qt5/lib:/usr/local/opt/curl/lib:/usr/local/opt/texinfo/lib:/usr/local/opt/boost/lib:$DYLD_LIBRARY_PATH"
 export PKG_CONFIG_PATH="/usr/local/opt/libffi/lib/pkgconfig:/usr/local/opt/libarchive/lib/pkgconfig:/usr/local/opt/icu4c/lib/pkgconfig:/usr/local/opt/qt5/lib/pkgconfig:/usr/local/opt/curl/lib/pkgconfig:/usr/local/opt/gtk+/lib/pkgconfig:/usr/local/opt/gtk+3/lib/pkgconfig:/usr/local/opt/gtkmm/lib/pkgconfig:/usr/local/opt/gtkmm3/lib/pkgconfig:$PKG_CONFIG_PATH"
-export GTK_PATH=/usr/local/lib/gtk-2.0
+export GTK_PATH=/usr/local/lib/gtk-2.0:/usr/local/lib/gtk-3.0
 
 # set MAKEFLAGS
 if type nproc &>/dev/null; then   # GNU/Linux
@@ -52,24 +48,13 @@ export REPO_TRACE=1
 export BUILD_MAC_SDK_EXPERIMENTAL=1
 
 # Paths
-BREW_PREFIX="/usr/local"
-BREW_EXEC="$BREW_PREFIX/bin/brew"
 BREW_GNU_COREUTILS_ROOT="/usr/local/opt/coreutils"
 BREW_GNU_SED_ROOT="/usr/local/opt/gnu-sed"
 BREW_GNU_COREUTILS_MANPATH="$BREW_GNU_COREUTILS_ROOT/libexec/gnuman"
 BREW_GNU_SED_MANPATH="$BREW_GNU_SED_ROOT/libexec/gnuman"
-GO_PATH=/usr/local/opt/go/libexec/bin
-FLUTTER_PATH=~/flutter/bin
 
-export PYTHONPATH="/usr/local/lib/python3.7/site-packages:$PYTHONPATH"
-export KDEDIRS=$KDEDIRS:$HOME/Library/Preferences/KDE:/usr/local/kde4
-export PATH="$HOME/bin:$HOME/.local/bin:$ANDROID_SDK_ROOT:$ANDROID_NDK_HOME:/usr/local/mysql/bin:$GO_PATH:$PATH"
+export PATH="$HOME/bin:$HOME/.local/bin:$ANDROID_SDK_ROOT:$ANDROID_NDK_HOME:$PATH"
 export JAVA_HOME=`/usr/libexec/java_home`
-# launchctl setenv DYLD_LIBRARY_PATH /usr/local/kde4/lib:$DYLD_LIBRARY_PATH
-# export XDG_DATA_HOME=$HOME/Library/Preferences/KDE/share
-# export XDG_DATA_DIRS=/usr/local/kde4/share:/usr/local/share:/usr/share
-
-# export FDK_EXE="~/bin/FDK/Tools/osx"
 export SVN_EDITOR=vim
 export FC=/usr/local/bin/gfortran
 export GNUTERM=aqua
@@ -88,3 +73,13 @@ export MYSQLXPB_PROTOBUF_INCLUDE_DIR=/usr/local/opt/protobuf/include
 export MYSQLXPB_PROTOBUF_LIB_DIR=/usr/local/opt/protobuf/lib
 export MYSQLXPB_PROTOC=/usr/local/opt/protobuf/bin/protoc
 
+# Less Colors for Man Pages
+export LESS_TERMCAP_mb=$'\E[01;31m' # begin blinking
+export LESS_TERMCAP_md=$'\E[01;38;5;74m' # begin bold
+export LESS_TERMCAP_me=$'\E[0m' # end mode
+export LESS_TERMCAP_se=$'\E[0m' # end standout-mode
+export LESS_TERMCAP_so=$'\E[38;5;246m' # begin standout-mode - info box
+export LESS_TERMCAP_ue=$'\E[0m' # end underline
+export LESS_TERMCAP_us=$'\E[04;38;5;146m' # begin underline
+
+export LESSOPEN="|/usr/local/bin/lesspipe.sh %s" LESS_ADVANCED_PREPROCESSOR=1
