@@ -1,15 +1,13 @@
 ;;; Adam's .emacs file
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(add-to-list 'default-frame-alist '(ns-appearance . dark))
 (setq select-enable-clipboard t)
-
 (when (memq window-system '(mac ns x))
   (setq mac-command-modifier 'meta)
   (setq mac-option-modifier 'meta)
+  (add-to-list 'default-frame-alist '(ns-appearance . dark))
   (setq ns-function-modifier 'meta))
 (add-to-list 'load-path "/usr/local/share/emacs/site-lisp")
-(scroll-bar-mode -1)
 (add-to-list 'load-path "~/.emacs.d/lisp")
 (add-to-list 'load-path "~/.emacs.d/elpa")
 
@@ -29,8 +27,13 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
+;; (unless (package-installed-p 'esup)
+;;     (package-refresh-contents)
+;;     (package-install 'esup))
+(setq esup-depth 0)
+
 (setq package-selected-packages
-  '(lsp-mode yasnippet lsp-treemacs helm-lsp lsp-ui projectile hydra
+  '(lsp-mode yasnippet lsp-treemacs helm-lsp lsp-ui hydra
     flycheck company avy which-key helm-xref dap-mode lsp-java
     zenburn-theme json-mode lsp-pyright auctex org langtool
     smartparens exec-path-from-shell gnu-elpa-keyring-update
@@ -45,7 +48,7 @@
 
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
-(load-theme 'zenburn)
+(load-theme 'zenburn t)
 
 ;; Set up "useful" coding environment.
 ;; Source: https://github.com/tuhdo/emacs-c-ide-demo
@@ -116,16 +119,22 @@
 (add-hook 'text-mode-hook 'turn-on-visual-line-mode)
 
 
-;; Turn on org mode.
-(require 'org)
+;; Turn on org mode when I'm editing org files.
+;; Source: https://github.com/cocreature/dotfiles/
+(use-package org
+  :defer
+  :mode ("\\.org\\'" . org-mode)
+  :config
+  (progn
+    (global-set-key "\C-cl" 'org-store-link)
+    (global-set-key "\C-ca" 'org-agenda)
+    (setq org-export-with-smart-quotes t)
+    (setq user-mail-address "champion@cse.ohio-state.edu")
+    (setq org-html-doctype "html5")
+    (setq org-html-html5-fancy t)
+    ))
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
-(global-set-key "\C-cl" 'org-store-link)
-(global-set-key "\C-ca" 'org-agenda)
 (global-font-lock-mode 1)
-(setq org-export-with-smart-quotes t)
-(setq user-mail-address "champion@cse.ohio-state.edu")
-(setq org-html-doctype "html5")
-(setq org-html-html5-fancy t)
 
 ;; Turn on ps-print.
 (require 'lpr)
@@ -201,25 +210,6 @@
       compilation-scroll-output 'first-error) ; Automatically scroll to first
 (global-set-key (kbd "<f5>") 'compile)
 
-;; Source: https://github.com/tuhdo/emacs-c-ide-demo
-;; (global-semanticdb-minor-mode 1)
-;; (global-semantic-idle-scheduler-mode 1)
-;; (global-semantic-stickyfunc-mode 1)
-
-;; (semantic-mode 1)
-
-;; (defun alexott/cedet-hook ()
-;;   (local-set-key "\C-c\C-j" 'semantic-ia-fast-jump)
-;;   (local-set-key "\C-c\C-s" 'semantic-ia-show-summary))
-;;
-;; (add-hook 'c-mode-common-hook 'alexott/cedet-hook)
-;; (add-hook 'c-mode-hook 'alexott/cedet-hook)
-;; (add-hook 'c++-mode-hook 'alexott/cedet-hook)
-;; (add-hook 'c++-mode-hook 'irony-mode)
-;;
-;; ;; Enable EDE only in C/C++
-;; (require 'ede)
-;; (global-ede-mode)
 
 ;; GDB
  ;; use gdb-many-windows by default
@@ -227,25 +217,29 @@
 (setq gdb-many-windows t)
 (setq gdb-show-main t)
 
+(use-package helm
+  :ensure t
+  :demand
+  :preface (require 'helm-config))
 
-;; Helm settings from https://tuhdo.github.io/helm-intro.html
-(require 'helm)
-(require 'helm-config)
-(require 'helm-eshell)
-(require 'helm-xref)
 (helm-mode t)
-(use-package helm-lsp)
-(global-set-key (kbd "C-c h") 'helm-command-prefix)
-(global-unset-key (kbd "C-x c"))
-(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
 (setq helm-split-window-in-side-p t ; open helm buffer inside current window, not occupy whole other window
-       helm-move-to-line-cycle-in-source t ; move to end or beginning of source when reaching top or bottom of source.
-       helm-ff-search-library-in-sexp t ; search for library in `require' and `declare-function' sexp.
-       helm-scroll-amount 8 ; scroll 8 lines other window using M-<next>/M-<prior>
-       helm-ff-file-name-history-use-recentf t
-       helm-quick-update t
-       helm-candidate-number-limit 20
-       helm-ff-skip-boring-files nil)
+    helm-move-to-line-cycle-in-source t ; move to end or beginning of source when reaching top or bottom of source.
+    helm-ff-search-library-in-sexp t ; search for library in `require' and  `declare-function' sexp.
+    helm-scroll-amount 8 ; scroll 8 lines other window using M-<next>/M-<prior>
+    helm-ff-file-name-history-use-recentf t
+    helm-quick-update t
+    helm-candidate-number-limit 20
+    helm-ff-skip-boring-files nil)
+
+(require 'helm-eshell)
+;; Helm settings from https://tuhdo.github.io/helm-intro.html
+(require 'helm-xref)
+
+(use-package helm-lsp
+  :defer)
+
+(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
 (global-set-key (kbd "M-x") 'helm-M-x)
 (setq helm-M-x-fuzzy-match nil) ;; optional fuzzy matching for helm-M-x
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
@@ -283,8 +277,8 @@
   (sh-mode . lsp-deferred) )
 
 (use-package lsp-java
-  :ensure t
-  :config (add-hook 'java-mode-hook 'lsp))
+  :defer
+  :config (add-hook 'java-mode-hook 'lsp-deferred))
 
 (use-package lsp-ui
   :commands lsp-ui-mode)
@@ -293,10 +287,10 @@
   :commands lsp-treemacs-errors-list)
 
 (use-package lsp-pyright
-  :ensure t
+  :defer
   :hook (python-mode . (lambda ()
                           (require 'lsp-pyright)
-                          (lsp))))  ; or lsp-deferred
+                          (lsp-deferred))))
 
 (use-package which-key
     :config
@@ -341,14 +335,10 @@
 (define-key c-mode-map  [(tab)] 'company-complete)
 (define-key c++-mode-map  [(tab)] 'company-complete)
 
-
-;; Helm with Projectile
-(require 'projectile)
-(projectile-global-mode)
-(setq projectile-enable-caching t)
-(setq projectile-completion-system 'helm)
-(setq projectile-indexing-method 'alien)
-;; (helm-projectile-on)
+;; Set portion of heap used for garbage collection to 60%.
+;; Source: Joe Schafer,
+;;   https://github.com/jschaf/dotfiles/blob/master/emacs/start.el
+(setq gc-cons-percentage 0.6)
 
 (setq gc-cons-threshold (* 256 1024 1024)
       read-process-output-max (* 4 1024 1024)
@@ -363,6 +353,7 @@
       lsp-idle-delay 1.000 ;; clangd is fast
       ;; be more ide-ish
       lsp-headerline-breadcrumb-enable t
+      lsp-use-plists t
       lsp-log-io nil)
 
 
@@ -457,6 +448,18 @@
 ;; (setq garbage-collection-messages t)
 
 
+;; Joe Schafer's profiling code:
+;; https://blog.d46.us/advanced-emacs-startup/
+;;
+;; Use a hook so the message doesn't get clobbered by other messages.
+(add-hook 'emacs-startup-hook
+  (lambda ()
+    (message "Emacs ready in %s with %d garbage collections."
+      (format "%.2f seconds"
+        (float-time
+          (time-subtract after-init-time before-init-time)))
+            gcs-done)))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -465,9 +468,9 @@
  '(blink-cursor-mode nil)
  '(column-number-mode t)
  '(custom-safe-themes
-   '("b77a00d5be78f21e46c80ce450e5821bdc4368abf4ffe2b77c5a66de1b648f10" "9e3ea605c15dc6eb88c5ff33a82aed6a4d4e2b1126b251197ba55d6b86c610a1" "569bc616c09c389761622ca5be12031dcd7a0fe4c28b1b7154242812b694318c" "3b8284e207ff93dfc5e5ada8b7b00a3305351a3fb222782d8033a400a48eca48" "e6df46d5085fde0ad56a46ef69ebb388193080cc9819e2d6024c9c6e27388ba9" default))
+   '("fc48cc3bb3c90f7761adf65858921ba3aedba1b223755b5924398c666e78af8b" "b77a00d5be78f21e46c80ce450e5821bdc4368abf4ffe2b77c5a66de1b648f10" "9e3ea605c15dc6eb88c5ff33a82aed6a4d4e2b1126b251197ba55d6b86c610a1" "569bc616c09c389761622ca5be12031dcd7a0fe4c28b1b7154242812b694318c" "3b8284e207ff93dfc5e5ada8b7b00a3305351a3fb222782d8033a400a48eca48" "e6df46d5085fde0ad56a46ef69ebb388193080cc9819e2d6024c9c6e27388ba9" default))
  '(package-selected-packages
-   '(sr-speedbar latex-preview-pane auctex-latexmk pdf-tools lsp-java lsp-origami find-file-in-project company-ctags lsp-pyright dap-mode company-lsp lsp-ui which-key helm-lsp helm-xref lsp-treemacs lsp-mode zenburn-theme use-package solarized-theme smartparens projectile langtool helm-gtags gnu-elpa-keyring-update flycheck exec-path-from-shell elpy auctex))
+   '(esup helm-ag sr-speedbar latex-preview-pane auctex-latexmk pdf-tools lsp-java lsp-origami find-file-in-project company-ctags lsp-pyright dap-mode company-lsp lsp-ui which-key helm-lsp helm-xref lsp-treemacs lsp-mode zenburn-theme use-package solarized-theme smartparens projectile langtool helm-gtags gnu-elpa-keyring-update flycheck exec-path-from-shell elpy auctex))
  '(show-paren-mode t)
  '(size-indication-mode t)
  '(tool-bar-mode nil))

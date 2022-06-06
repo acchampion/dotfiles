@@ -37,6 +37,9 @@ elif type sysctl -n hw.ncpu &>/dev/null; then   # macOS, FreeBSD
   export MAKEFLAGS="$MAKEFLAGS -j$(($(sysctl -n hw.ncpu)-1))"
 fi
 
+# Set Emacs LSP to use plists.
+export LSP_USE_PLISTS=true
+
 # Set Android NDK and compilation vars
 export ANDROID_SDK=/usr/local/share/android-sdk
 export ANDROID_SDK_ROOT=/usr/local/share/android-sdk
