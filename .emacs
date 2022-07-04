@@ -1,6 +1,7 @@
-;;; Adam's .emacs file
-;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; .emacs main configuration file
+;;  Author: Adam C. Champion
+;;; Commentary: This is my personal Emacs configuration
+;;; Code:
 (setq select-enable-clipboard t)
 (when (memq window-system '(mac ns x))
   (setq mac-command-modifier 'meta)
@@ -27,6 +28,7 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
+;;; Install the esup package if you haven't already.
 ;; (unless (package-installed-p 'esup)
 ;;     (package-refresh-contents)
 ;;     (package-install 'esup))
@@ -265,22 +267,39 @@
 
 ;; LSP mode: provide consistent language servers to check for errors
 ;;   in C, C++, HTML, CSS, ECMAScript, etc.
+;; Updated with Ian Y.E. Pan's config:
+;;   https://github.com/ianyepan/.wsl-emacs.d/blob/master/init.el
 (use-package lsp-mode
   :commands lsp
   :hook
-  (c-mode . lsp-deferred)
-  (c++-mode . lsp-deferred)
-  (css-mode . lsp-deferred)
-  (html-mode . lsp-deferred)
-  (java-mode . lsp-deferred)
-  (python-mode . lsp-deferred)
-  (sh-mode . lsp-deferred) )
+  ((c-mode        ;; clangd
+    c++-mode      ;; clangd
+    c-or-c++-mode ;; clangd
+    html-mode     ;; ts-ls/HTML/CSS
+    python-mode   ;; pyright
+    web-mode      ;; ts-ls/HTML/css
+    ) . lsp-deferred )
+  :config
+  (setq lsp-clients-clangd-executable (executable-find "clangd")))
 
 (use-package lsp-java
   :defer
   :config (add-hook 'java-mode-hook 'lsp-deferred))
 
+(add-hook 'java-mode-hook
+          #'(lambda () (when (eq major-mode 'java-mode) (lsp-deferred))))
+
 (use-package lsp-ui
+  :config
+  (custom-set-faces '(lsp-ui-sideline-global ((t (:italic t)))))
+  (setq lsp-ui-doc-enable nil)
+  (setq lsp-ui-doc-use-childframe t)
+  (setq lsp-ui-doc-position 'at-point)
+  (setq lsp-ui-doc-include-signature t)
+  (setq lsp-ui-doc-border (face-foreground 'default))
+  (setq lsp-ui-sideline-show-code-actions nil)
+  (setq lsp-ui-peek-always-show t)
+  (setq lsp-ui-sideline-delay 0.05)
   :commands lsp-ui-mode)
 
 (use-package lsp-treemacs
@@ -288,9 +307,9 @@
 
 (use-package lsp-pyright
   :defer
-  :hook (python-mode . (lambda ()
-                          (require 'lsp-pyright)
-                          (lsp-deferred))))
+  :init (when (executable-find "python3")
+          (setq lsp-pyright-python-executable-cmd "python3"))
+  :hook (python-mode . (lambda () (require 'lsp-pyright))))
 
 (use-package which-key
     :config
@@ -343,14 +362,14 @@
 (setq gc-cons-threshold (* 256 1024 1024)
       read-process-output-max (* 4 1024 1024)
       treemacs-space-between-root-nodes nil
-      company-idle-delay 0.001
+      company-idle-delay 0.050
       company-tooltip-limit 10
       company-echo-delay 0
       company-show-numbers nil
       lsp-prefer-capf t
       company-minimum-prefix-length 1
       create-lockfiles nil
-      lsp-idle-delay 1.000 ;; clangd is fast
+      lsp-idle-delay 0.250 ;; clangd is fast
       ;; be more ide-ish
       lsp-headerline-breadcrumb-enable t
       lsp-use-plists t
@@ -371,22 +390,22 @@
 ;; (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
 (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
 
-(require 'flycheck)
-(global-flycheck-mode)
-(setq flycheck-chktexrc "~/.chktexrc")
-(blink-cursor-mode 0)
+(use-package flycheck
+  :hook ((prog-mode . flycheck-mode)
+         (latex-mode . flycheck-mode)
+         (markdown-mode . flycheck-mode)
+         (org-mode . flycheck-mode))
+  :config
+  (setq flycheck-chktexrc "~/.chktexrc")
+)
 
+(blink-cursor-mode 0)
 (global-linum-mode t) ;; enable line numbers globally
 (setq linum-format "%d ")
-
-;; (elpy-enable)
-;; (setq elpy-rpc-python-command "python3")
 
 ;; (require 'perl-use-utf8-coding)
 
 (setq speedbar-show-unknown-files t)
-;; (require 'yasnippet)
-;; (yas-global-mode 1)
 
 ;; Set fonts for macOS and Linux. I use Menlo, Office Code Pro, or
 ;; Liberation Mono.
