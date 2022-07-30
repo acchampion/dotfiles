@@ -1,6 +1,7 @@
-;;; .emacs main configuration file
+;;; .emacs main configuration file --- Summary
 ;;  Author: Adam C. Champion
-;;; Commentary: This is my personal Emacs configuration
+;;; Commentary:
+;;;   This is my personal Emacs configuration
 ;;; Code:
 (setq select-enable-clipboard t)
 (when (memq window-system '(mac ns x))
@@ -121,8 +122,8 @@
   :mode ("\\.org\\'" . org-mode)
   :config
   (progn
-    (global-set-key "\C-cl" 'org-store-link)
-    (global-set-key "\C-ca" 'org-agenda)
+    ;; (global-set-key "\C-cl" 'org-store-link)
+    ;; (global-set-key "\C-ca" 'org-agenda)
     (setq org-export-with-smart-quotes t)
     (setq user-mail-address "champion@cse.ohio-state.edu")
     (setq org-html-doctype "html5")
@@ -263,7 +264,7 @@
 ;; Updated with Ian Y.E. Pan's config:
 ;;   https://github.com/ianyepan/.wsl-emacs.d/blob/master/init.el
 (use-package lsp-mode
-  :commands lsp
+  :commands lsp lsp-clients
   :hook
   ((c-mode        ;; clangd
     c++-mode      ;; clangd
@@ -273,6 +274,7 @@
     web-mode      ;; ts-ls/HTML/css
     ) . lsp-deferred )
   :config
+  (lsp-clients-register-clangd)
   (setq lsp-clients-clangd-executable (executable-find "clangd")))
 
 (use-package lsp-java
@@ -355,14 +357,14 @@
 (setq gc-cons-threshold (* 256 1024 1024)
       read-process-output-max (* 4 1024 1024)
       treemacs-space-between-root-nodes nil
-      company-idle-delay 0.050
+      company-idle-delay 0.250
       company-tooltip-limit 10
       company-echo-delay 0
       company-show-numbers nil
       lsp-prefer-capf t
       company-minimum-prefix-length 1
       create-lockfiles nil
-      lsp-idle-delay 0.250 ;; clangd is fast
+      lsp-idle-delay 0.100 ;; clangd is fast
       ;; be more ide-ish
       lsp-headerline-breadcrumb-enable t
       lsp-use-plists t
@@ -403,15 +405,20 @@
 ;; Set fonts for macOS and Linux. I use Menlo, Office Code Pro, or
 ;; Liberation Mono.
 ;; Source: https://www.emacswiki.org/emacs/SetFonts (cinsk)
+;; default font size (point * 10)
+;;
+;; WARNING!  Depending on the default font,
+;; if the size is not supported very well, the frame will be clipped
+;; so that the beginning of the buffer may not be visible correctly.
+
+(when (eq system-type 'windows)
+  (set-face-attribute 'default nil :font "Consolas")
+  (set-face-attribute 'default nil :height 160)
+)
+
 (when (eq system-type 'darwin)
   ;; default Latin font (e.g. Consolas)
   (set-face-attribute 'default nil :font "Office Code Pro")
-
-  ;; default font size (point * 10)
-  ;;
-  ;; WARNING!  Depending on the default font,
-  ;; if the size is not supported very well, the frame will be clipped
-  ;; so that the beginning of the buffer may not be visible correctly.
   (set-face-attribute 'default nil :height 160)
 )
 (when (eq system-type 'linux)
@@ -480,7 +487,7 @@
  '(blink-cursor-mode nil)
  '(column-number-mode t)
  '(custom-safe-themes
-   '("fc48cc3bb3c90f7761adf65858921ba3aedba1b223755b5924398c666e78af8b" "b77a00d5be78f21e46c80ce450e5821bdc4368abf4ffe2b77c5a66de1b648f10" "9e3ea605c15dc6eb88c5ff33a82aed6a4d4e2b1126b251197ba55d6b86c610a1" "569bc616c09c389761622ca5be12031dcd7a0fe4c28b1b7154242812b694318c" "3b8284e207ff93dfc5e5ada8b7b00a3305351a3fb222782d8033a400a48eca48" "e6df46d5085fde0ad56a46ef69ebb388193080cc9819e2d6024c9c6e27388ba9" default))
+   '("7f1d414afda803f3244c6fb4c2c64bea44dac040ed3731ec9d75275b9e831fe5" "fc48cc3bb3c90f7761adf65858921ba3aedba1b223755b5924398c666e78af8b" "b77a00d5be78f21e46c80ce450e5821bdc4368abf4ffe2b77c5a66de1b648f10" "9e3ea605c15dc6eb88c5ff33a82aed6a4d4e2b1126b251197ba55d6b86c610a1" "569bc616c09c389761622ca5be12031dcd7a0fe4c28b1b7154242812b694318c" "3b8284e207ff93dfc5e5ada8b7b00a3305351a3fb222782d8033a400a48eca48" "e6df46d5085fde0ad56a46ef69ebb388193080cc9819e2d6024c9c6e27388ba9" default))
  '(package-selected-packages
    '(esup helm-ag sr-speedbar latex-preview-pane auctex-latexmk pdf-tools lsp-java lsp-origami find-file-in-project company-ctags lsp-pyright dap-mode company-lsp lsp-ui which-key helm-lsp helm-xref lsp-treemacs lsp-mode zenburn-theme use-package solarized-theme smartparens projectile langtool helm-gtags gnu-elpa-keyring-update flycheck exec-path-from-shell elpy auctex))
  '(show-paren-mode t)

@@ -119,7 +119,7 @@ brew install cmake doxygen boost-build open-mpi hwloc tbb boost-mpi \
 ######################################################################
 # Install hdf5
 ######################################################################
-brew install szip hdf5
+brew install hdf5
 ######################################################################
 # Install tmux, wget, curl
 ######################################################################
@@ -182,8 +182,7 @@ brew install ivy ant gradle maven scala leiningen kotlin
 brew install jhead libgeotiff jasper netpbm glib gts fltk giflib \
   pngcheck libsvg ninja poco fontconfig glib-networking meson \
   gsettings-desktop-schemas
-brew install little-cms little-cms2 jbig2dec libidn openjpeg \
-  ghostscript
+brew install little-cms2 jbig2dec libidn openjpeg ghostscript
 brew install epstool gl2ps intltool pixman psutils uchardet groff
 brew install webp gd imath openexr lame mpg123 mp3gain x264 chromaprint
 brew install orc schroedinger pango docbook-xsl xmlto shared-mime-info \
@@ -288,11 +287,10 @@ brew install --cask font-clear-sans font-cascadia-mono \
   font-cooper-hewitt font-dejavu font-fira-code font-fira-sans \
   font-go font-ibm-plex-serif font-ibm-plex-sans \
   font-ibm-plex-sans-condensed font-ibm-plex-mono font-jetbrains-mono \
-  font-liberation font-libertinus font-latin-modern \
-  font-noto-color-emoji font-noto-mono font-noto-sans \
-  font-noto-serif font-office-code-pro font-open-sans font-roboto \
-  font-source-code-pro font-source-sans-pro font-source-serif-pro \
-  font-stix font-urw-base35
+  font-liberation font-latin-modern font-noto-color-emoji \
+  font-noto-mono font-noto-sans font-noto-serif font-office-code-pro \
+  font-open-sans font-roboto font-source-code-pro \
+  font-source-sans-pro font-source-serif-pro font-stix font-urw-base35
 ######################################################################
 # More Homebrew Cask Apps.
 ######################################################################
