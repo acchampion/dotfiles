@@ -1,7 +1,8 @@
 ;;; .emacs main configuration file --- Summary
-;;  Author: Adam C. Champion
-;;; Commentary:
-;;;   This is my personal Emacs configuration
+;;;
+;;; Author: Adam C. Champion
+;;; Commentary: This is my personal Emacs configuration
+;;;
 ;;; Code:
 (setq select-enable-clipboard t)
 (when (memq window-system '(mac ns x))
@@ -16,10 +17,13 @@
 (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
 
 (require 'package) ;; You might already have this line
-(add-to-list 'package-archives
-  '("melpa" . "https://melpa.org/packages/") t)
-(add-to-list 'package-archives
-  '("org" . "https://orgmode.org/elpa/") t)
+(with-eval-after-load 'package
+  (add-to-list 'package-archives
+               '("melpa" . "https://melpa.org/packages/") t)
+  (add-to-list 'package-archives
+               '("org" . "https://orgmode.org/elpa/") t)
+  (add-to-list 'package-archives
+               '("nongnu" . "https://elpa.nongnu.org/nongnu/" ) t))
 
 (package-initialize) ;; You might already have this line
 
@@ -36,11 +40,10 @@
 (setq esup-depth 0)
 
 (setq package-selected-packages
-  '(lsp-mode yasnippet lsp-treemacs helm-lsp lsp-ui hydra
-    flycheck company avy which-key helm-xref dap-mode lsp-java
-    zenburn-theme json-mode lsp-pyright auctex org langtool
-    smartparens exec-path-from-shell gnu-elpa-keyring-update
-    latex-preview-pane ))
+  '(yasnippet hydra flycheck company avy which-key helm helm-core dap-mode
+              zenburn-theme json-mode auctex org langtool smartparens
+              exec-path-from-shell gnu-elpa-keyring-update eglot corfu
+              orderless ))
 
 (when (cl-find-if-not #'package-installed-p package-selected-packages)
   (package-refresh-contents)
@@ -132,6 +135,22 @@
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 (global-font-lock-mode 1)
 
+
+;; Org-mode method for generating abbreviations in HTML.
+;; Source:
+;;   https://emacs.stackexchange.com/questions/12624/how-can-i-generate-the-abbr-html-tag-from-org-mode
+(defun org-export-abbr (backend)
+  "Replace {abbreviation|description} to <abbr> html text in
+current buffer"
+  (when (equal backend 'html)
+    (save-excursion
+      (beginning-of-buffer)
+      (replace-regexp "{\\(.*?\\)|\\(.*?\\)}"
+                      "@@html:<abbr title=\"\\2\">\\1</abbr>@@"))))
+
+(add-hook 'org-export-before-parsing-hook 'org-export-abbr)
+
+
 ;; Turn on ps-print.
 (require 'lpr)
 (require 'ps-print)
@@ -179,13 +198,6 @@
 (setq sentence-end-double-space nil)
 
 
-;; Programming
-(setq c-default-style "linux") ; set style to "linux"
-(setq c-basic-offset 2)
-(setq ediff-diff-options "-w"
-      ediff-split-window-function 'split-window-horizontally
-      ediff-window-setup-function 'ediff-setup-windows-plain)
-
 ;; C programming support for emacs
 (require 'cedet)
 (require 'compile)
@@ -207,33 +219,26 @@
 (global-set-key (kbd "<f5>") 'compile)
 
 
-;; GDB
- ;; use gdb-many-windows by default
- ;; Display source file containing the main routine at startup
-(setq gdb-many-windows t)
-(setq gdb-show-main t)
-
-(use-package helm
-  :ensure t
-  :demand
-  :preface (require 'helm-config))
+(require 'helm)
+;; (require 'helm-config)
 
 (helm-mode t)
 (setq helm-split-window-in-side-p t ; open helm buffer inside current window, not occupy whole other window
     helm-move-to-line-cycle-in-source t ; move to end or beginning of source when reaching top or bottom of source.
     helm-ff-search-library-in-sexp t ; search for library in `require' and  `declare-function' sexp.
     helm-scroll-amount 8 ; scroll 8 lines other window using M-<next>/M-<prior>
+    helm-ff-keep-cached-candidates nil
     helm-ff-file-name-history-use-recentf t
     helm-quick-update t
     helm-candidate-number-limit 20
-    helm-ff-skip-boring-files nil)
+    helm-ff-skip-boring-files t)
 
-(require 'helm-eshell)
+;; (require 'helm-eshell)
 ;; Helm settings from https://tuhdo.github.io/helm-intro.html
-(require 'helm-xref)
+;; (require 'helm-xref)
 
-(use-package helm-lsp
-  :defer)
+;; (use-package helm-lsp
+;;  :defer)
 
 (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
 (global-set-key (kbd "M-x") 'helm-M-x)
@@ -259,95 +264,146 @@
 (define-key global-map [remap switch-to-buffer] #'helm-mini)
 
 
+(use-package eglot
+  :ensure t
+  :commands eglot
+  :hook
+  ((c-mode . eglot-ensure)
+   (cpp-mode . eglot-ensure)
+   (python-mode . eglot-ensure))
+  :config
+  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd")))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Begin: LSP mode stuff
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LSP mode: provide consistent language servers to check for errors
 ;;   in C, C++, HTML, CSS, ECMAScript, etc.
 ;; Updated with Ian Y.E. Pan's config:
 ;;   https://github.com/ianyepan/.wsl-emacs.d/blob/master/init.el
-(use-package lsp-mode
-  :commands lsp lsp-clients
-  :hook
-  ((c-mode        ;; clangd
-    c++-mode      ;; clangd
-    c-or-c++-mode ;; clangd
-    html-mode     ;; ts-ls/HTML/CSS
-    python-mode   ;; pyright
-    web-mode      ;; ts-ls/HTML/css
-    ) . lsp-deferred )
-  :config
-  (lsp-clients-register-clangd)
-  (setq lsp-clients-clangd-executable (executable-find "clangd")))
-
-(use-package lsp-java
-  :defer
-  :config (add-hook 'java-mode-hook 'lsp-deferred))
-
-(add-hook 'java-mode-hook
-          #'(lambda () (when (eq major-mode 'java-mode) (lsp-deferred))))
-
-(use-package lsp-ui
-  :config
-  (custom-set-faces '(lsp-ui-sideline-global ((t (:italic t)))))
-  (setq lsp-ui-doc-enable nil)
-  (setq lsp-ui-doc-use-childframe t)
-  (setq lsp-ui-doc-position 'at-point)
-  (setq lsp-ui-doc-include-signature t)
-  (setq lsp-ui-doc-border (face-foreground 'default))
-  (setq lsp-ui-sideline-show-code-actions nil)
-  (setq lsp-ui-peek-always-show t)
-  (setq lsp-ui-sideline-delay 0.05)
-  :commands lsp-ui-mode)
-
-(use-package lsp-treemacs
-  :commands lsp-treemacs-errors-list)
-
-(use-package lsp-pyright
-  :defer
-  :init (when (executable-find "python3")
-          (setq lsp-pyright-python-executable-cmd "python3"))
-  :hook (python-mode . (lambda () (require 'lsp-pyright))))
+;; (use-package lsp-mode
+;;   :commands lsp lsp-clients
+;;   :hook
+;;   ((c-mode        ;; clangd
+;;     c++-mode      ;; clangd
+;;     c-or-c++-mode ;; clangd
+;;     html-mode     ;; ts-ls/HTML/CSS
+;;     python-mode   ;; pyright
+;;     web-mode      ;; ts-ls/HTML/css
+;;     ) . lsp-deferred )
+;;   :config
+;;   (require 'lsp-clangd)
+;;   (when (executable-find "clangd")
+;;     (setq lsp-clangd-binary-path "/usr/bin/clangd"
+;;           lsp-clients-clangd-executable "/usr/bin/clangd"))
+;;   (add-hook 'c-mode-hook #'lsp-deferred)
+;;   (add-hook 'c-or-c++-mode #'lsp-deferred)
+;;   (add-hook 'c++-mode-hook #'lsp-deferred))
+;;
+;;
+;; (use-package lsp-java
+;;   :defer
+;;   :config (add-hook 'java-mode-hook 'lsp-deferred))
+;;
+;; (add-hook 'java-mode-hook
+;;           #'(lambda () (when (eq major-mode 'java-mode) (lsp-deferred))))
+;;
+;; (use-package lsp-ui
+;;   :config
+;;   (custom-set-faces '(lsp-ui-sideline-global ((t (:italic t)))))
+;;   (setq lsp-ui-doc-enable nil)
+;;   (setq lsp-ui-doc-use-childframe t)
+;;   (setq lsp-ui-doc-position 'at-point)
+;;   (setq lsp-ui-doc-include-signature t)
+;;   (setq lsp-ui-doc-border (face-foreground 'default))
+;;   (setq lsp-lens-enable nil)
+;;   (setq lsp-ui-sideline-show-hover nil)
+;;   (setq lsp-ui-sideline-show-code-actions nil)
+;;   (setq lsp-ui-peek-always-show t)
+;;   (setq lsp-ui-sideline-delay 0.05)
+;;   :commands lsp-ui-mode)
+;;
+;; (use-package lsp-treemacs
+;;   :commands lsp-treemacs-errors-list)
+;;
+;; (use-package lsp-pyright
+;;   :defer
+;;   :init (when (executable-find "python3")
+;;           (setq lsp-pyright-python-executable-cmd "python3"))
+;;   :hook (python-mode . (lambda () (require 'lsp-pyright))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; End: lsp-mode stuff
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package which-key
     :config
     (which-key-mode))
 
-(use-package hydra)
+;; (use-package hydra)
 
 ;; Speed up LSP mode.
 ;; Source: http://blog.binchen.org/posts/how-to-speed-up-lsp-mode.html
-(with-eval-after-load 'lsp-mode
-  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
-  (require 'dap-cpptools)
-  (require 'dap-chrome)
-  (dap-auto-configure-mode)
-  (yas-global-mode)
+;; (with-eval-after-load 'lsp-mode
+;;   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
+;;   (require 'dap-cpptools)
+;;   (dap-auto-configure-mode)
+;;   (yas-global-mode)
+;;
+;;  ;; enable log only for debug
+;;   (setq lsp-log-io nil)
+;;
+;;   (setq lsp-enable-completion-at-point t)
+;;   (setq lsp-enable-symbol-highlighting t)
+;;   (setq lsp-enable-links nil)
+;;   (setq lsp-restart 'auto-restart)
+;;   (setq lsp-client-packages '(lsp-clients))
+;;
+;;   ;; don't ping LSP lanaguage server too frequently
+;;   (defvar lsp-on-touch-time 10)
+;;   (defadvice lsp-on-change (around lsp-on-change-hack activate)
+;;     ;; don't run `lsp-on-change' too frequently
+;;     (when (> (- (float-time (current-time))
+;;                 lsp-on-touch-time) 10) ;; 10 seconds
+;;       (setq lsp-on-touch-time (float-time (current-time)))
+;;       ad-do-it))
+;;   )
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
- ;; enable log only for debug
-  (setq lsp-log-io nil)
+;; Corfu (Emacs completion)
+;; Source: https://github.com/minad/corfu
+(use-package corfu
+  :ensure t
+  ;; Optional customizations
+  :custom
+  (setq tab-always-indent 'complete)
+  (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+  ;; (corfu-auto t)                 ;; Enable auto completion
+  ;; (corfu-separator ?\s)          ;; Orderless field separator
+  ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+  ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+  ;; (corfu-preview-current nil)    ;; Disable current candidate preview
+  ;; (corfu-preselect-first nil)    ;; Disable candidate preselection
+  ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+  ;; (corfu-scroll-margin 5)        ;; Use scroll margin
 
-  (setq lsp-enable-completion-at-point t)
-  (setq lsp-enable-symbol-highlighting t)
-  (setq lsp-enable-links nil)
-  (setq lsp-restart 'auto-restart)
-  (setq lsp-client-packages '(lsp-clients))
+  ;; Enable Corfu only for certain modes.
+  ;; :hook ((prog-mode . corfu-mode)
+  ;;        (shell-mode . corfu-mode)
+  ;;        (eshell-mode . corfu-mode))
 
-  ;; don't ping LSP lanaguage server too frequently
-  (defvar lsp-on-touch-time 10)
-  (defadvice lsp-on-change (around lsp-on-change-hack activate)
-    ;; don't run `lsp-on-change' too frequently
-    (when (> (- (float-time (current-time))
-                lsp-on-touch-time) 10) ;; 10 seconds
-      (setq lsp-on-touch-time (float-time (current-time)))
-      ad-do-it))
-  )
-
+  ;; Recommended: Enable Corfu globally.
+  ;; This is recommended since Dabbrev can be used globally (M-/).
+  ;; See also `corfu-excluded-modes'.
+  :init
+  (global-corfu-mode))
 
 ;; Company mode
-(require 'company)
+;; (require 'company)
 (require 'popup)
-(add-hook 'after-init-hook 'global-company-mode)
-(setq company-backends (delete 'company-semantic company-backends))
-(define-key c-mode-map  [(tab)] 'company-complete)
-(define-key c++-mode-map  [(tab)] 'company-complete)
+;; (add-hook 'after-init-hook 'global-company-mode)
+;; (setq company-backends (delete 'company-semantic company-backends))
+;; (define-key c-mode-map  [(tab)] 'company-complete)
+;; (define-key c++-mode-map  [(tab)] 'company-complete)
 
 ;; Set portion of heap used for garbage collection to 60%.
 ;; Source: Joe Schafer,
@@ -402,7 +458,7 @@
 
 (setq speedbar-show-unknown-files t)
 
-;; Set fonts for macOS and Linux. I use Menlo, Office Code Pro, or
+;; Set fonts for macOS and Linux. I use Office Code Pro or
 ;; Liberation Mono.
 ;; Source: https://www.emacswiki.org/emacs/SetFonts (cinsk)
 ;; default font size (point * 10)
@@ -418,7 +474,7 @@
 
 (when (eq system-type 'darwin)
   ;; default Latin font (e.g. Consolas)
-  (set-face-attribute 'default nil :font "Office Code Pro")
+  (set-face-attribute 'default nil :font "Office Code Pro D")
   (set-face-attribute 'default nil :height 160)
 )
 (when (eq system-type 'linux)
@@ -489,8 +545,7 @@
  '(custom-safe-themes
    '("7f1d414afda803f3244c6fb4c2c64bea44dac040ed3731ec9d75275b9e831fe5" "fc48cc3bb3c90f7761adf65858921ba3aedba1b223755b5924398c666e78af8b" "b77a00d5be78f21e46c80ce450e5821bdc4368abf4ffe2b77c5a66de1b648f10" "9e3ea605c15dc6eb88c5ff33a82aed6a4d4e2b1126b251197ba55d6b86c610a1" "569bc616c09c389761622ca5be12031dcd7a0fe4c28b1b7154242812b694318c" "3b8284e207ff93dfc5e5ada8b7b00a3305351a3fb222782d8033a400a48eca48" "e6df46d5085fde0ad56a46ef69ebb388193080cc9819e2d6024c9c6e27388ba9" default))
  '(package-selected-packages
-   '(esup helm-ag sr-speedbar latex-preview-pane auctex-latexmk pdf-tools lsp-java lsp-origami find-file-in-project company-ctags lsp-pyright dap-mode company-lsp lsp-ui which-key helm-lsp helm-xref lsp-treemacs lsp-mode zenburn-theme use-package solarized-theme smartparens projectile langtool helm-gtags gnu-elpa-keyring-update flycheck exec-path-from-shell elpy auctex))
- '(show-paren-mode t)
+   '(corfu-terminal eglot-jl eglot-java eglot emmet-mode web-mode corfu esup helm-ag sr-speedbar latex-preview-pane auctex-latexmk pdf-tools lsp-java lsp-origami find-file-in-project company-ctags lsp-pyright dap-mode company-lsp lsp-ui which-key helm-lsp helm-xref lsp-treemacs lsp-mode zenburn-theme use-package solarized-theme smartparens projectile langtool helm-gtags gnu-elpa-keyring-update flycheck exec-path-from-shell elpy auctex))
  '(size-indication-mode t)
  '(tool-bar-mode nil))
 (custom-set-faces
