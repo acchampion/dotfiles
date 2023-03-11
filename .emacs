@@ -8,7 +8,6 @@
 (when (memq window-system '(mac ns x))
   (setq mac-command-modifier 'meta)
   (setq mac-option-modifier 'meta)
-  (add-to-list 'default-frame-alist '(ns-appearance . dark))
   (setq ns-function-modifier 'meta))
 (add-to-list 'load-path "/usr/local/share/emacs/site-lisp")
 (add-to-list 'load-path "~/.emacs.d/lisp")
@@ -41,20 +40,59 @@
 
 (setq package-selected-packages
   '(yasnippet hydra flycheck company avy which-key helm helm-core dap-mode
-              zenburn-theme json-mode auctex org langtool smartparens
+              zenburn-theme json-mode auctex org smartparens
               exec-path-from-shell gnu-elpa-keyring-update eglot corfu
-              orderless ))
+              orderless langtool ))
 
 (when (cl-find-if-not #'package-installed-p package-selected-packages)
   (package-refresh-contents)
   (mapc #'package-install package-selected-packages))
 
-(when (memq window-system '(mac ns x))
-  (exec-path-from-shell-initialize))
+;; Fix path in shell.
+;;
+;; Code source: https://github.com/xenodium/dotsies/blob/main/emacs/
+;;   features/fe-package-extensions.el
+(use-package exec-path-from-shell
+  :ensure t
+  :config
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize))
+    (if (and (fboundp 'native-comp-available-p)
+            (native-comp-available-p))
+        (progn
+            (message "Native comp is available")
+            ;; Using Emacs.app/Contents/MacOS/bin since it was compiled with
+            ;; ./configure --prefix="$PWD/nextstep/Emacs.app/Contents/MacOS"
+            ;; Append to path to give priority to values from 
+            ;;   exec-path-from-shell-initialize.
+            (add-to-list 'exec-path (concat invocation-directory (file-name-as-directory "bin")) t)
+            (setenv "LIBRARY_PATH" (concat (getenv "LIBRARY_PATH")
+                                       (when (getenv "LIBRARY_PATH")
+                                           ":")
+            ;; This is where Homebrew puts libgccjit libraries.
+                                       (car (file-expand-wildcards
+               (expand-file-name "/usr/local/opt/libgccjit/lib/gcc/*")))))
+            ;; Only set after LIBRARY_PATH can find gcc libraries.
+            (setq comp-deferred-compilation t)
+            (setq comp-speed 3))
+        (message "Native comp is *not* available")))
+
 
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
-(load-theme 'zenburn t)
+;; Automatically apply theme (light or dark) based on OS theme
+;; (also light or dark). This is for Emacs-Plus only:
+;;   https://github.com/d12frosted/homebrew-emacs-plus .
+(defun my/apply-theme (appearance)
+  "Load theme, taking current system APPEARANCE into consideration."
+  (mapc #'disable-theme custom-enabled-themes)
+  (pcase appearance
+    ('light (load-theme 'modus-operandi t))
+    ('dark (load-theme 'modus-vivendi t))))
+
+(add-hook 'ns-system-appearance-change-functions #'my/apply-theme)
+
+
 
 ;; Set up "useful" coding environment.
 ;; Source: https://github.com/tuhdo/emacs-c-ide-demo
@@ -79,6 +117,13 @@
 (setq reftex-plug-into-AUCTeX t)
 (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
 ;; (latex-preview-pane-enable)
+(add-hook 'TeX-mode-hook
+  (lambda ()
+    (setq TeX-command-extra-options "-shell-escape")
+  )
+)
+
+
 
 (autoload 'longlines-mode
    "longlines.el"
@@ -154,10 +199,15 @@ current buffer"
 ;; Turn on ps-print.
 (require 'lpr)
 (require 'ps-print)
+
+;; Enscript
 (require 'enscript)
 
 ;; Add Cousine to supported printing fonts.
 ;; Make sure it's in your ~/.fonts directory.
+;; Download it from:
+;;   https://github.com/google/fonts/tree/main/apache/cousine
+;;   (License: Apache 2.0)
 (setq ps-font-info-database
     (append
         '((Cousine
@@ -196,6 +246,7 @@ current buffer"
 (setq langtool-default-language "en-US")
 (setq langtool-mother-tongue "en")
 (setq sentence-end-double-space nil)
+
 
 
 ;; C programming support for emacs
@@ -270,9 +321,18 @@ current buffer"
   :hook
   ((c-mode . eglot-ensure)
    (cpp-mode . eglot-ensure)
+   (markdown-mode . eglot-ensure)
+   (org-mode . eglot-ensure)
    (python-mode . eglot-ensure))
+   ;;(text-mode . eglot-ensure))
   :config
-  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd")))
+  (add-to-list 'eglot-server-programs
+               '((c++-mode c-mode) "clangd"))
+  (add-to-list 'eglot-server-programs
+               '((markdown-mode) "efm-langserver"))
+  (add-to-list 'eglot-server-programs
+               '((org-mode) "efm-langserver")))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Begin: LSP mode stuff
@@ -445,14 +505,21 @@ current buffer"
   :hook ((prog-mode . flycheck-mode)
          (latex-mode . flycheck-mode)
          (markdown-mode . flycheck-mode)
-         (org-mode . flycheck-mode))
+         (org-mode . flycheck-mode)
+         (text-mode . flycheck-mode))
   :config
   (setq flycheck-chktexrc "~/.chktexrc")
+;;  (require 'flycheck-vale)
+;;  (flycheck-vale-setup)
+  (setq flycheck-vale-program "/usr/local/bin/vale")
 )
 
 (blink-cursor-mode 0)
-(global-linum-mode t) ;; enable line numbers globally
-(setq linum-format "%d ")
+(when (version<= "26.0.50" emacs-version )
+  (global-display-line-numbers-mode))
+
+;; (global-linum-mode t) ;; enable line numbers globally
+;; (setq linum-format "%d ")
 
 ;; (require 'perl-use-utf8-coding)
 
@@ -506,6 +573,8 @@ current buffer"
              (replace-regexp-in-string ".ps" ".pdf" (eval preview-file))))
          )))))
 )
+;; Enable global line highlighting.
+(global-hl-line-mode 1)
 (setq inhibit-startup-screen t)
 (setq line-numbers-p t)
 (setq org-agenda-export-html-style nil)
@@ -519,6 +588,7 @@ current buffer"
 (setq speedbar-default-position (quote left))
 (setq speedbar-show-unknown-files t)
 (setq sr-speedbar-right-side nil)
+(setq use-short-answers 1)
 (tool-bar-mode -1)
 ;; (setq garbage-collection-messages t)
 
@@ -543,9 +613,9 @@ current buffer"
  '(blink-cursor-mode nil)
  '(column-number-mode t)
  '(custom-safe-themes
-   '("7f1d414afda803f3244c6fb4c2c64bea44dac040ed3731ec9d75275b9e831fe5" "fc48cc3bb3c90f7761adf65858921ba3aedba1b223755b5924398c666e78af8b" "b77a00d5be78f21e46c80ce450e5821bdc4368abf4ffe2b77c5a66de1b648f10" "9e3ea605c15dc6eb88c5ff33a82aed6a4d4e2b1126b251197ba55d6b86c610a1" "569bc616c09c389761622ca5be12031dcd7a0fe4c28b1b7154242812b694318c" "3b8284e207ff93dfc5e5ada8b7b00a3305351a3fb222782d8033a400a48eca48" "e6df46d5085fde0ad56a46ef69ebb388193080cc9819e2d6024c9c6e27388ba9" default))
+   '("e3c41651565cb624f772d25fbf12752b31610800041968d96c9aef5a3e8ead8e" "2dc03dfb67fbcb7d9c487522c29b7582da20766c9998aaad5e5b63b5c27eec3f" "7f1d414afda803f3244c6fb4c2c64bea44dac040ed3731ec9d75275b9e831fe5" "fc48cc3bb3c90f7761adf65858921ba3aedba1b223755b5924398c666e78af8b" "b77a00d5be78f21e46c80ce450e5821bdc4368abf4ffe2b77c5a66de1b648f10" "9e3ea605c15dc6eb88c5ff33a82aed6a4d4e2b1126b251197ba55d6b86c610a1" "569bc616c09c389761622ca5be12031dcd7a0fe4c28b1b7154242812b694318c" "3b8284e207ff93dfc5e5ada8b7b00a3305351a3fb222782d8033a400a48eca48" "e6df46d5085fde0ad56a46ef69ebb388193080cc9819e2d6024c9c6e27388ba9" default))
  '(package-selected-packages
-   '(corfu-terminal eglot-jl eglot-java eglot emmet-mode web-mode corfu esup helm-ag sr-speedbar latex-preview-pane auctex-latexmk pdf-tools lsp-java lsp-origami find-file-in-project company-ctags lsp-pyright dap-mode company-lsp lsp-ui which-key helm-lsp helm-xref lsp-treemacs lsp-mode zenburn-theme use-package solarized-theme smartparens projectile langtool helm-gtags gnu-elpa-keyring-update flycheck exec-path-from-shell elpy auctex))
+   '(adwaita-dark-theme flycheck-yamllint yaml-mode helm-tramp helm-tree-sitter flycheck-vale tree-sitter-langs tree-sitter corfu-terminal eglot-jl eglot-java eglot emmet-mode web-mode corfu esup helm-ag sr-speedbar latex-preview-pane auctex-latexmk pdf-tools lsp-java lsp-origami find-file-in-project company-ctags lsp-pyright dap-mode company-lsp lsp-ui which-key helm-lsp helm-xref lsp-treemacs lsp-mode zenburn-theme use-package solarized-theme smartparens projectile langtool helm-gtags gnu-elpa-keyring-update flycheck exec-path-from-shell elpy auctex))
  '(size-indication-mode t)
  '(tool-bar-mode nil))
 (custom-set-faces

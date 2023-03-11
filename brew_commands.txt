@@ -230,13 +230,15 @@ brew install ttf2pt1
 ######################################################################
 brew install ghc cabal-install pandoc
 brew install openjdk@11 languagetool ctags jansson libgccjit \
-  enscript aspell
+  enscript aspell 
 brew install libuv c-ares node yarn
 brew install onigurama jq
 brew install z3 llvm
 brew tap d12frosted/emacs-plus
-brew install awk xz emacs-plus
-ln -s /usr/local/opt/emacs-plus@28/Emacs.app /Applications
+brew install awk xz mailutils
+brew install emacs-plus@29 --with-native-comp --with-mailutils \
+  --with-imagemagick
+ln -s /usr/local/opt/emacs-plus@29/Emacs.app /Applications
 ######################################################################
 # Communications software
 ######################################################################
