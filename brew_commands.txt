@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ######################################################################
 # Package Installation Commands for Homebrew
-# (C) 2016--2022 Adam C. Champion
+# (C) 2016--2023 Adam C. Champion
 ######################################################################
 # Tested on macOS Ventura
 ######################################################################
@@ -56,9 +56,9 @@ brew install zsh zsh-completions
 git clone --recursive https://github.com/sorin-ionescu/prezto.git \
     "${ZDOTDIR:-$HOME}/.zprezto"
 setopt EXTENDED_GLOB
-for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
-  ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
-done
+# for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
+#  ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
+# done
 chsh -s /usr/local/bin/zsh
 brew install romkatv/powerlevel10k/powerlevel10k
 echo 'source /usr/local/opt/powerlevel10k/powerlevel10k.zsh-theme' >>! ~/.zshrc
@@ -134,7 +134,7 @@ sudo airodump-ng-oui-update
 brew install bison help2man flex dos2unix tofrodos libdnet libpcap
 brew install tcpdump
 brew install socat telnet apktool dex2jar smali gperf gperftools \
-  markdown
+  markdown vbindiff
 brew install --cask wireshark
 brew install libplist libusbmuxd libzip libimobiledevice \
   ideviceinstaller ios-deploy cocoapods
@@ -218,7 +218,7 @@ brew install tradcpp portaudio fltk glpk hdf5 texinfo glpk qhull \
 ######################################################################
 # Python stuff
 ######################################################################
-brew install pybind11 numpy scipy
+brew install pyenv pybind11 numpy scipy
 ######################################################################
 # Font stuff
 ######################################################################
@@ -230,14 +230,13 @@ brew install ttf2pt1
 ######################################################################
 brew install ghc cabal-install pandoc
 brew install openjdk@11 languagetool ctags jansson libgccjit \
-  enscript aspell 
+  enscript aspell tree-sitter
 brew install libuv c-ares node yarn
 brew install onigurama jq
 brew install z3 llvm
 brew tap d12frosted/emacs-plus
 brew install awk xz mailutils
-brew install emacs-plus@29 --with-native-comp --with-mailutils \
-  --with-imagemagick
+brew install emacs-plus@29 --with-native-comp --with-mailutils
 ln -s /usr/local/opt/emacs-plus@29/Emacs.app /Applications
 ######################################################################
 # Communications software
@@ -288,13 +287,16 @@ brew install gflags glog ceres-solver glog glew jsoncpp netcdf \
 # double-check the font license terms (and follow them).
 ######################################################################
 brew tap homebrew/cask-fonts
-brew install --cask font-clear-sans font-cascadia-mono font-fira-sans \
-  font-go font-ibm-plex-serif font-ibm-plex-sans \
-  font-ibm-plex-sans-condensed font-ibm-plex-mono font-jetbrains-mono \
-  font-liberation font-latin-modern font-noto-color-emoji \
-  font-noto-sans font-noto-serif font-office-code-pro font-roboto-flex \
-  font-roboto-serif font-source-code-pro font-source-sans-pro \
-  font-source-serif-pro font-stix font-urw-base35
+brew install --cask font-archivo font-archivo-black \
+  font-archivo-narrow font-carrois-gothic font-clear-sans \
+  font-cascadia-mono font-fira-sans font-go font-ibm-plex-serif \
+  font-ibm-plex-sans font-ibm-plex-sans-condensed font-ibm-plex-mono \
+  font-inconsolata-lgc font-jetbrains-mono font-liberation \
+  font-latin-modern font-lato font-merriweather font-merriweather-sans \
+  font-newsreader font-noto-color-emoji font-noto-sans \
+  font-noto-sans-symbols font-noto-serif font-office-code-pro \
+  font-roboto-flex font-roboto-serif font-source-code-pro \
+  font-source-sans-3 font-source-serif-4 font-urw-base35 font-work-sans
 ######################################################################
 # More Homebrew Cask Apps.
 ######################################################################
@@ -314,6 +316,5 @@ brew install --cask genymotion
 brew install --cask intellij-idea-ce pycharm-ce
 brew install --cask mactex skim texmaker tabula tor-browser \
   transmission visual-studio-code
-brew install --cask betterzip box-sync cloudmounter daisydisk \
-  flutter foobar2000 geany graphsketcher libreoffice musicbrainz-picard \
-  omnigraffle pagico path-finder qobuz spotify textsniper unclutter xld
+brew install --cask flutter foobar2000 geany graphsketcher libreoffice \
+     musicbrainz-picard xld

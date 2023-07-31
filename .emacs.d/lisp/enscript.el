@@ -259,7 +259,7 @@
 	  (if use-fancy-header-p "-G" "")
 	  ;; text font
 	  (if (or (null font)
-		  (null size)) "-fGoMono10"
+		  (null size)) "-fCousine10"
 	    (concat "-f" font size))
 	  ;; use line numbers?
  	  (if line-numbers-p "-C" "")

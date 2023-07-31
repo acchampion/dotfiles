@@ -1,7 +1,10 @@
-;;; .emacs main configuration file --- Summary
+;;; .emacs --- Summary
 ;;;
 ;;; Author: Adam C. Champion
-;;; Commentary: This is my personal Emacs configuration
+;;;
+;;; Commentary:
+;;;
+;;; This is my personal Emacs configuration
 ;;;
 ;;; Code:
 (setq select-enable-clipboard t)
@@ -15,12 +18,13 @@
 
 (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
 
+(setq native-comp-async-report-warnings-errors nil)
+(setq warning-minimum-level :error)
+
 (require 'package) ;; You might already have this line
 (with-eval-after-load 'package
   (add-to-list 'package-archives
                '("melpa" . "https://melpa.org/packages/") t)
-  (add-to-list 'package-archives
-               '("org" . "https://orgmode.org/elpa/") t)
   (add-to-list 'package-archives
                '("nongnu" . "https://elpa.nongnu.org/nongnu/" ) t))
 
@@ -30,7 +34,9 @@
   (package-install 'use-package))
 
 (require 'use-package)
+(setq use-package-verbose t)
 (setq use-package-always-ensure t)
+(setq load-prefer-newer t)
 
 ;;; Install the esup package if you haven't already.
 ;; (unless (package-installed-p 'esup)
@@ -39,10 +45,10 @@
 (setq esup-depth 0)
 
 (setq package-selected-packages
-  '(yasnippet hydra flycheck company avy which-key helm helm-core dap-mode
-              zenburn-theme json-mode auctex org smartparens
-              exec-path-from-shell gnu-elpa-keyring-update eglot corfu
-              orderless langtool ))
+      '(flycheck which-key zenburn-theme json-mode auctex org
+          smartparens exec-path-from-shell gnu-elpa-keyring-update
+          eglot corfu vertico orderless savehist marginalia consult
+          langtool treesit-auto ))
 
 (when (cl-find-if-not #'package-installed-p package-selected-packages)
   (package-refresh-contents)
@@ -87,12 +93,17 @@
   "Load theme, taking current system APPEARANCE into consideration."
   (mapc #'disable-theme custom-enabled-themes)
   (pcase appearance
-    ('light (load-theme 'modus-operandi t))
-    ('dark (load-theme 'modus-vivendi t))))
+    ('light (load-theme 'leuven t))
+    ('dark (load-theme 'leuven-dark t))))
 
 (add-hook 'ns-system-appearance-change-functions #'my/apply-theme)
 
 
+(use-package treesit-auto
+  :demand t
+  :config
+  (setq treesit-auto-install 'prompt)
+  (global-treesit-auto-mode))
 
 ;; Set up "useful" coding environment.
 ;; Source: https://github.com/tuhdo/emacs-c-ide-demo
@@ -167,6 +178,7 @@
 ;; Source: https://github.com/cocreature/dotfiles/
 (use-package org
   :defer
+  :pin gnu
   :mode ("\\.org\\'" . org-mode)
   :config
   (progn
@@ -176,6 +188,8 @@
     (setq user-mail-address "champion@cse.ohio-state.edu")
     (setq org-html-doctype "html5")
     (setq org-html-html5-fancy t)
+    (require 'ox-publish)
+    (require 'ox-slimhtml)
     ))
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 (global-font-lock-mode 1)
@@ -201,6 +215,7 @@ current buffer"
 (require 'ps-print)
 
 ;; Enscript
+
 (require 'enscript)
 
 ;; Add Cousine to supported printing fonts.
@@ -270,49 +285,92 @@ current buffer"
 (global-set-key (kbd "<f5>") 'compile)
 
 
-(require 'helm)
-;; (require 'helm-config)
+(use-package vertico
+  :ensure t
+  :custom
+  (vertico-cycle t)
+  :init
+  (vertico-mode))
 
-(helm-mode t)
-(setq helm-split-window-in-side-p t ; open helm buffer inside current window, not occupy whole other window
-    helm-move-to-line-cycle-in-source t ; move to end or beginning of source when reaching top or bottom of source.
-    helm-ff-search-library-in-sexp t ; search for library in `require' and  `declare-function' sexp.
-    helm-scroll-amount 8 ; scroll 8 lines other window using M-<next>/M-<prior>
-    helm-ff-keep-cached-candidates nil
-    helm-ff-file-name-history-use-recentf t
-    helm-quick-update t
-    helm-candidate-number-limit 20
-    helm-ff-skip-boring-files t)
+;; Configure directory extension.
+(use-package vertico-directory
+  :after vertico
+  :ensure nil
+  ;; More convenient directory navigation commands
+  :bind (:map vertico-map
+              ("RET" . vertico-directory-enter)
+              ("DEL" . vertico-directory-delete-char)
+              ("M-DEL" . vertico-directory-delete-word))
+  ;; Tidy shadowed file names
+  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
 
-;; (require 'helm-eshell)
-;; Helm settings from https://tuhdo.github.io/helm-intro.html
-;; (require 'helm-xref)
+(use-package savehist
+  :init
+  (savehist-mode))
 
-;; (use-package helm-lsp
-;;  :defer)
+;; Enable the consult package.
+;; Code from https://github.com/minad/consult
+(use-package consult
+  :hook (completion-list-mode . consult-preview-at-point-mode)
+  :init
 
-(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
-(global-set-key (kbd "M-x") 'helm-M-x)
-(setq helm-M-x-fuzzy-match nil) ;; optional fuzzy matching for helm-M-x
-(global-set-key (kbd "M-y") 'helm-show-kill-ring)
-(global-set-key (kbd "C-x b") 'helm-mini)
-(global-set-key (kbd "C-x C-f") 'helm-find-files)
-(when (executable-find "ack")
-   (setq helm-grep-default-command "ack -Hn --no-group --no-color %e %p %f"
-         helm-grep-default-recurse-command "ack -H --no-group --no-color %e %p %f"))
-(add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
-(global-set-key (kbd "C-c h o") 'helm-occur)
-(global-set-key (kbd "C-h SPC") 'helm-all-mark-rings)
-(global-set-key (kbd "C-c h x") 'helm-register)
-(global-set-key (kbd "C-c h g") 'helm-google-suggest)
-(add-hook 'eshell-mode-hook
-           #'(lambda ()
-               (define-key eshell-mode-map (kbd "C-c C-l")  'helm-eshell-history)))
-(define-key minibuffer-local-map (kbd "C-c C-l") 'helm-minibuffer-history)
+  ;; Optionally configure the register formatting. This improves the register
+  ;; preview for `consult-register', `consult-register-load',
+  ;; `consult-register-store' and the Emacs built-ins.
+  (setq register-preview-delay 0.5
+        register-preview-function #'consult-register-format)
 
-(define-key global-map [remap find-file] #'helm-find-files)
-(define-key global-map [remap execute-extended-command] #'helm-M-x)
-(define-key global-map [remap switch-to-buffer] #'helm-mini)
+  ;; Optionally tweak the register preview window.
+  ;; This adds thin lines, sorting and hides the mode line of the window.
+  (advice-add #'register-preview :override #'consult-register-window)
+
+  ;; Use Consult to select xref locations with preview
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
+
+  ;; Configure other variables and modes in the :config section,
+  ;; after lazily loading the package.
+  :config
+
+  ;; Optionally configure preview. The default value
+  ;; is 'any, such that any key triggers the preview.
+  ;; (setq consult-preview-key 'any)
+  ;; (setq consult-preview-key "M-.")
+  ;; (setq consult-preview-key '("S-<down>" "S-<up>"))
+  ;; For some commands and buffer sources it is useful to configure the
+  ;; :preview-key on a per-command basis using the `consult-customize' macro.
+  (consult-customize
+   consult-theme :preview-key '(:debounce 0.2 any)
+   consult-ripgrep consult-git-grep consult-grep
+   consult-bookmark consult-recent-file consult-xref
+   consult--source-bookmark consult--source-file-register
+   consult--source-recent-file consult--source-project-recent-file
+   ;; :preview-key "M-."
+   :preview-key '(:debounce 0.4 any))
+
+  ;; Optionally configure the narrowing key.
+  ;; Both < and C-+ work reasonably well.
+  (setq consult-narrow-key "<") ;; "C-+"
+)
+
+(use-package orderless
+  :ensure t
+  :custom
+  (completion-styles '(substring orderless basic))
+  (completion-category-overrides '((file (styles basic partial-completion))
+                                   (command (styles +orderless-with-initialism))
+                                   (variable (styles +orderless-with-initialism))
+                                   (symbol (styles +orderless-with-initialism)))))
+
+(use-package marginalia
+  :after vertico
+  :ensure t
+  :custom
+  (marginalia-max-relative-age 0)
+  (marginalia-align 'right)
+  :init
+  (marginalia-mode))
+
 
 
 (use-package eglot
@@ -334,100 +392,11 @@ current buffer"
                '((org-mode) "efm-langserver")))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Begin: LSP mode stuff
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; LSP mode: provide consistent language servers to check for errors
-;;   in C, C++, HTML, CSS, ECMAScript, etc.
-;; Updated with Ian Y.E. Pan's config:
-;;   https://github.com/ianyepan/.wsl-emacs.d/blob/master/init.el
-;; (use-package lsp-mode
-;;   :commands lsp lsp-clients
-;;   :hook
-;;   ((c-mode        ;; clangd
-;;     c++-mode      ;; clangd
-;;     c-or-c++-mode ;; clangd
-;;     html-mode     ;; ts-ls/HTML/CSS
-;;     python-mode   ;; pyright
-;;     web-mode      ;; ts-ls/HTML/css
-;;     ) . lsp-deferred )
-;;   :config
-;;   (require 'lsp-clangd)
-;;   (when (executable-find "clangd")
-;;     (setq lsp-clangd-binary-path "/usr/bin/clangd"
-;;           lsp-clients-clangd-executable "/usr/bin/clangd"))
-;;   (add-hook 'c-mode-hook #'lsp-deferred)
-;;   (add-hook 'c-or-c++-mode #'lsp-deferred)
-;;   (add-hook 'c++-mode-hook #'lsp-deferred))
-;;
-;;
-;; (use-package lsp-java
-;;   :defer
-;;   :config (add-hook 'java-mode-hook 'lsp-deferred))
-;;
-;; (add-hook 'java-mode-hook
-;;           #'(lambda () (when (eq major-mode 'java-mode) (lsp-deferred))))
-;;
-;; (use-package lsp-ui
-;;   :config
-;;   (custom-set-faces '(lsp-ui-sideline-global ((t (:italic t)))))
-;;   (setq lsp-ui-doc-enable nil)
-;;   (setq lsp-ui-doc-use-childframe t)
-;;   (setq lsp-ui-doc-position 'at-point)
-;;   (setq lsp-ui-doc-include-signature t)
-;;   (setq lsp-ui-doc-border (face-foreground 'default))
-;;   (setq lsp-lens-enable nil)
-;;   (setq lsp-ui-sideline-show-hover nil)
-;;   (setq lsp-ui-sideline-show-code-actions nil)
-;;   (setq lsp-ui-peek-always-show t)
-;;   (setq lsp-ui-sideline-delay 0.05)
-;;   :commands lsp-ui-mode)
-;;
-;; (use-package lsp-treemacs
-;;   :commands lsp-treemacs-errors-list)
-;;
-;; (use-package lsp-pyright
-;;   :defer
-;;   :init (when (executable-find "python3")
-;;           (setq lsp-pyright-python-executable-cmd "python3"))
-;;   :hook (python-mode . (lambda () (require 'lsp-pyright))))
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; End: lsp-mode stuff
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 (use-package which-key
     :config
     (which-key-mode))
-
 ;; (use-package hydra)
 
-;; Speed up LSP mode.
-;; Source: http://blog.binchen.org/posts/how-to-speed-up-lsp-mode.html
-;; (with-eval-after-load 'lsp-mode
-;;   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
-;;   (require 'dap-cpptools)
-;;   (dap-auto-configure-mode)
-;;   (yas-global-mode)
-;;
-;;  ;; enable log only for debug
-;;   (setq lsp-log-io nil)
-;;
-;;   (setq lsp-enable-completion-at-point t)
-;;   (setq lsp-enable-symbol-highlighting t)
-;;   (setq lsp-enable-links nil)
-;;   (setq lsp-restart 'auto-restart)
-;;   (setq lsp-client-packages '(lsp-clients))
-;;
-;;   ;; don't ping LSP lanaguage server too frequently
-;;   (defvar lsp-on-touch-time 10)
-;;   (defadvice lsp-on-change (around lsp-on-change-hack activate)
-;;     ;; don't run `lsp-on-change' too frequently
-;;     (when (> (- (float-time (current-time))
-;;                 lsp-on-touch-time) 10) ;; 10 seconds
-;;       (setq lsp-on-touch-time (float-time (current-time)))
-;;       ad-do-it))
-;;   )
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Corfu (Emacs completion)
 ;; Source: https://github.com/minad/corfu
@@ -436,20 +405,15 @@ current buffer"
   ;; Optional customizations
   :custom
   (setq tab-always-indent 'complete)
-  (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+  (corfu-cycle t)              ;; Enable cycling for `corfu-next/previous'
   ;; (corfu-auto t)                 ;; Enable auto completion
-  ;; (corfu-separator ?\s)          ;; Orderless field separator
+  (corfu-separator ?\s)          ;; Orderless field separator
   ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
   ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
   ;; (corfu-preview-current nil)    ;; Disable current candidate preview
   ;; (corfu-preselect-first nil)    ;; Disable candidate preselection
-  ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+  (corfu-on-exact-match nil)     ;; Configure handling of exact matches
   ;; (corfu-scroll-margin 5)        ;; Use scroll margin
-
-  ;; Enable Corfu only for certain modes.
-  ;; :hook ((prog-mode . corfu-mode)
-  ;;        (shell-mode . corfu-mode)
-  ;;        (eshell-mode . corfu-mode))
 
   ;; Recommended: Enable Corfu globally.
   ;; This is recommended since Dabbrev can be used globally (M-/).
@@ -457,13 +421,7 @@ current buffer"
   :init
   (global-corfu-mode))
 
-;; Company mode
-;; (require 'company)
 (require 'popup)
-;; (add-hook 'after-init-hook 'global-company-mode)
-;; (setq company-backends (delete 'company-semantic company-backends))
-;; (define-key c-mode-map  [(tab)] 'company-complete)
-;; (define-key c++-mode-map  [(tab)] 'company-complete)
 
 ;; Set portion of heap used for garbage collection to 60%.
 ;; Source: Joe Schafer,
@@ -473,12 +431,12 @@ current buffer"
 (setq gc-cons-threshold (* 256 1024 1024)
       read-process-output-max (* 4 1024 1024)
       treemacs-space-between-root-nodes nil
-      company-idle-delay 0.250
-      company-tooltip-limit 10
-      company-echo-delay 0
-      company-show-numbers nil
+;;       company-idle-delay 0.250
+;;       company-tooltip-limit 10
+;;       company-echo-delay 0
+;;       company-show-numbers nil
       lsp-prefer-capf t
-      company-minimum-prefix-length 1
+;;      company-minimum-prefix-length 1
       create-lockfiles nil
       lsp-idle-delay 0.100 ;; clangd is fast
       ;; be more ide-ish
@@ -612,10 +570,90 @@ current buffer"
  ;; If there is more than one, they won't work right.
  '(blink-cursor-mode nil)
  '(column-number-mode t)
+ '(connection-local-criteria-alist
+   '(((:application tramp :machine "localhost")
+      tramp-connection-local-darwin-ps-profile)
+     ((:application tramp :machine "ACrMBP16.local")
+      tramp-connection-local-darwin-ps-profile)
+     ((:application tramp)
+      tramp-connection-local-default-system-profile tramp-connection-local-default-shell-profile)))
+ '(connection-local-profile-alist
+   '((tramp-connection-local-darwin-ps-profile
+      (tramp-process-attributes-ps-args "-acxww" "-o" "pid,uid,user,gid,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" "-o" "state=abcde" "-o" "ppid,pgid,sess,tty,tpgid,minflt,majflt,time,pri,nice,vsz,rss,etime,pcpu,pmem,args")
+      (tramp-process-attributes-ps-format
+       (pid . number)
+       (euid . number)
+       (user . string)
+       (egid . number)
+       (comm . 52)
+       (state . 5)
+       (ppid . number)
+       (pgrp . number)
+       (sess . number)
+       (ttname . string)
+       (tpgid . number)
+       (minflt . number)
+       (majflt . number)
+       (time . tramp-ps-time)
+       (pri . number)
+       (nice . number)
+       (vsize . number)
+       (rss . number)
+       (etime . tramp-ps-time)
+       (pcpu . number)
+       (pmem . number)
+       (args)))
+     (tramp-connection-local-busybox-ps-profile
+      (tramp-process-attributes-ps-args "-o" "pid,user,group,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" "-o" "stat=abcde" "-o" "ppid,pgid,tty,time,nice,etime,args")
+      (tramp-process-attributes-ps-format
+       (pid . number)
+       (user . string)
+       (group . string)
+       (comm . 52)
+       (state . 5)
+       (ppid . number)
+       (pgrp . number)
+       (ttname . string)
+       (time . tramp-ps-time)
+       (nice . number)
+       (etime . tramp-ps-time)
+       (args)))
+     (tramp-connection-local-bsd-ps-profile
+      (tramp-process-attributes-ps-args "-acxww" "-o" "pid,euid,user,egid,egroup,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" "-o" "state,ppid,pgid,sid,tty,tpgid,minflt,majflt,time,pri,nice,vsz,rss,etimes,pcpu,pmem,args")
+      (tramp-process-attributes-ps-format
+       (pid . number)
+       (euid . number)
+       (user . string)
+       (egid . number)
+       (group . string)
+       (comm . 52)
+       (state . string)
+       (ppid . number)
+       (pgrp . number)
+       (sess . number)
+       (ttname . string)
+       (tpgid . number)
+       (minflt . number)
+       (majflt . number)
+       (time . tramp-ps-time)
+       (pri . number)
+       (nice . number)
+       (vsize . number)
+       (rss . number)
+       (etime . number)
+       (pcpu . number)
+       (pmem . number)
+       (args)))
+     (tramp-connection-local-default-shell-profile
+      (shell-file-name . "/bin/sh")
+      (shell-command-switch . "-c"))
+     (tramp-connection-local-default-system-profile
+      (path-separator . ":")
+      (null-device . "/dev/null"))))
  '(custom-safe-themes
    '("e3c41651565cb624f772d25fbf12752b31610800041968d96c9aef5a3e8ead8e" "2dc03dfb67fbcb7d9c487522c29b7582da20766c9998aaad5e5b63b5c27eec3f" "7f1d414afda803f3244c6fb4c2c64bea44dac040ed3731ec9d75275b9e831fe5" "fc48cc3bb3c90f7761adf65858921ba3aedba1b223755b5924398c666e78af8b" "b77a00d5be78f21e46c80ce450e5821bdc4368abf4ffe2b77c5a66de1b648f10" "9e3ea605c15dc6eb88c5ff33a82aed6a4d4e2b1126b251197ba55d6b86c610a1" "569bc616c09c389761622ca5be12031dcd7a0fe4c28b1b7154242812b694318c" "3b8284e207ff93dfc5e5ada8b7b00a3305351a3fb222782d8033a400a48eca48" "e6df46d5085fde0ad56a46ef69ebb388193080cc9819e2d6024c9c6e27388ba9" default))
  '(package-selected-packages
-   '(adwaita-dark-theme flycheck-yamllint yaml-mode helm-tramp helm-tree-sitter flycheck-vale tree-sitter-langs tree-sitter corfu-terminal eglot-jl eglot-java eglot emmet-mode web-mode corfu esup helm-ag sr-speedbar latex-preview-pane auctex-latexmk pdf-tools lsp-java lsp-origami find-file-in-project company-ctags lsp-pyright dap-mode company-lsp lsp-ui which-key helm-lsp helm-xref lsp-treemacs lsp-mode zenburn-theme use-package solarized-theme smartparens projectile langtool helm-gtags gnu-elpa-keyring-update flycheck exec-path-from-shell elpy auctex))
+   '(org treesit-auto adwaita-dark-theme flycheck-yamllint yaml-mode flycheck-vale tree-sitter-langs tree-sitter corfu-terminal eglot-jl eglot-java eglot emmet-mode web-mode corfu esup sr-speedbar latex-preview-pane auctex-latexmk pdf-tools lsp-java lsp-origami find-file-in-project company-ctags lsp-pyright company-lsp lsp-ui which-key zenburn-theme use-package solarized-theme smartparens projectile langtool gnu-elpa-keyring-update flycheck exec-path-from-shell elpy auctex))
  '(size-indication-mode t)
  '(tool-bar-mode nil))
 (custom-set-faces
