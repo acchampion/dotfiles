@@ -1,3 +1,21 @@
+#!/usr/bin/env bash
+######################################################################
+# Package Installation Commands for Homebrew
+# (C) 2016--2024 Adam C. Champion
+######################################################################
+# Tested on macOS Sequoia
+######################################################################
+# License: Apache 2.0
+######################################################################
+# This script is intended to be helpful. However, I offer it "as is"
+# with NO WARRANTY WHATSOEVER, including the implied warranties of
+# merchantability or fitness for a particular purpose. Users assume
+# all risk of using the script.
+######################################################################
+# Users are responsible for compliance with software license
+# agreements, including paying for licenses as required
+# (e.g., for Path Finder and Omni Group apps).
+######################################################################
 brew install --cask betterzip box-sync cloudmounter daisydisk dropbox \
   omnifocus omnigraffle pagico path-finder qobuz spotify textsniper \
-  unclutter xld
+  unclutter
